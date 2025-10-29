@@ -1,0 +1,12 @@
+﻿services:
+  waterdelivery.ui:
+    image: waterdelivery.ui
+    build:
+      context: .
+      dockerfile: WaterDelivery.UI/Dockerfile
+
+  waterdelivery.backend:
+    image: waterdelivery.backend
+    build:
+      context: .
+      dockerfile: WaterDelivery.Backend/Dockerfile

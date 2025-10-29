@@ -1,0 +1,90 @@
+@page "/First"
+@rendermode InteractiveServer
+
+<h3>First</h3>
+<div>
+    <input @bind="EmployeeToAdd.Name" placeholder="Name"/>
+    <input @bind="EmployeeToAdd.Age" placeholder="Age"/>
+    <input @bind="EmployeeToAdd.Height" placeholder="Height"/>
+    <input @bind="EmployeeToAdd.Weight" placeholder="Weight"/>
+    
+    <button @onclick="AddEmployee">Add New Employee</button>
+</div>
+
+<table>
+    <thead>
+    <tr>
+        <th> Name</th>
+        <th> Age</th>
+        <th> Height</th>
+        <th> Weight</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    @foreach (var employee in _employees)
+    {
+        <tr>
+            <td>@employee.Name</td>
+            <td>@employee.Age</td>
+            <td>@employee.Height</td>
+            <td>@employee.Weight</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code {
+    private List<Employee> _employees = new ();
+
+    private Employee EmployeeToAdd { get; set; } = new Employee();
+
+    public void AddEmployee()
+    {
+        if (EmployeeToAdd.Age == 0 || EmployeeToAdd.Height == 0 || string.IsNullOrWhiteSpace(EmployeeToAdd.Name) || EmployeeToAdd.Weight == 0)
+        {
+            
+        }
+        else
+        {
+            _employees.Add(EmployeeToAdd);
+            EmployeeToAdd = new Employee();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        await Task.Delay(500);
+
+        var employee1 = new Employee
+        {
+            Name = "Artem",
+            Age = 21,
+            Height = 175,
+            Weight = 80
+        };
+
+        var employee2 = new Employee
+        {
+            Name = "Artem2",
+            Age = 22,
+            Height = 180,
+            Weight = 85
+        };
+        
+        _employees.Add(employee1);
+        _employees.Add(employee2);
+    }
+
+    private class Employee
+    {
+        public string Name { get; set; }
+
+        public int Age { get; set; }
+
+        public int Height { get; set; }
+
+        public double Weight { get; set; }
+    }
+}

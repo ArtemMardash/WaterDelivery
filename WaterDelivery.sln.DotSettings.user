@@ -1,0 +1,19 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9ed548a9_002Dab29_002D4015_002Dbef9_002D50b6b85e397f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Create_User_Should_Fail" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_User_Should_Fail&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d3c6aff4_002D8552_002D4190_002Da6ad_002Db960407f0b62/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Create_User_Should_Fail #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_User_Should_Fail&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_Product_Unit_Should_Fail&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_Product_Should_Fail&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_Order_Item_Should_Fail&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_Delivery_Should_Fail&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Set_DeliverY_Status_Should_Fail&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Set_Delivery_Status_Should_Fail&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_Address_Should_Fail&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_Bill_ShouldFail&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
