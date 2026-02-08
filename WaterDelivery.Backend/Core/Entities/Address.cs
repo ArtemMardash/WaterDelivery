@@ -1,4 +1,4 @@
-namespace WaterDelivery.Backend.Core.ValueObjects;
+namespace WaterDelivery.Backend.Core.Entities;
 
 public class Address
 {
@@ -19,6 +19,8 @@ public class Address
     public string City { get; set; }
 
     public string State { get; set; }
+    
+    public bool IsDeleted { get; set; }
 
     public Address(string street, string houseNumber, string? aptNumber, string city, string state)
     {
@@ -30,7 +32,7 @@ public class Address
         SetState(state);
     }
 
-    public Address(Guid id, string street, string houseNumber, string? aptNumber, string city, string state)
+    public Address(Guid id, string street, string houseNumber, string? aptNumber, string city, string state, bool isDeleted)
     {
         Id = id;
         SetStreet(street);
@@ -38,6 +40,7 @@ public class Address
         SetAptNumber(aptNumber);
         SetCity(city);
         SetState(state);
+        IsDeleted = isDeleted;
     }
 
     public void SetStreet(string input)

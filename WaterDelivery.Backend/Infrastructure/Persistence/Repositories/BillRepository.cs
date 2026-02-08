@@ -6,7 +6,7 @@ using WaterDelivery.Backend.Infrastructure.Persistence.Mapping;
 
 namespace WaterDelivery.Backend.Infrastructure.Persistence.Repositories;
 
-public class BillRepository: IBillRepsoitory
+public class BillRepository: IBillRepository
 {
     private readonly IMongoCollection<BillDb> _bill;
     
@@ -15,7 +15,7 @@ public class BillRepository: IBillRepsoitory
         _bill = context.GetCollection<BillDb>("bill");
     }
     
-    public async Task<string> CreateBillAsync(Bill bill, CancellationToken cancellationToken)
+    public async Task<Guid> CreateBillAsync(Bill bill, CancellationToken cancellationToken)
     {
         var billDb = bill.ToDb();
         await _bill.InsertOneAsync(billDb, cancellationToken);
@@ -25,18 +25,24 @@ public class BillRepository: IBillRepsoitory
 
     public async Task UpdateBillAsync(Bill bill, CancellationToken cancellationToken)
     {
-        await _bill.ReplaceOneAsync(b => b.Id == bill.Id.ToString(), bill.ToDb(), cancellationToken: cancellationToken);
+        var billDb = bill.ToDb();
+        var update = Builders<BillDb>.Update
+            .Set(b => b.PaymentDate, billDb.PaymentDate)
+            .Set(b => b.Order, billDb.Order)
+            .Set(b => b.Status, billDb.Status)
+            .Set(b => b.CreationDate, billDb.CreationDate);
+        await _bill.UpdateOneAsync(b => b.Id == bill.Id, update, cancellationToken: cancellationToken);
     }
 
-    public async Task<Bill> GetBillById(Guid id, CancellationToken cancellationToken)
+    public async Task<Bill> GetBillByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var billDb = await _bill.Find(b => b.Id == id.ToString()).FirstOrDefaultAsync(cancellationToken);
+        var billDb = await _bill.Find(b => b.Id == id).FirstOrDefaultAsync(cancellationToken);
 
         return billDb.ToDomain();
     }
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        await _bill.DeleteOneAsync(b => b.Id == id.ToString(), cancellationToken);
+        await _bill.DeleteOneAsync(b => b.Id == id, cancellationToken);
     }
 }

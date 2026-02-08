@@ -6,15 +6,15 @@ using WaterDelivery.Backend.Infrastructure.Persistence.Mapping;
 
 namespace WaterDelivery.Backend.Infrastructure.Persistence.Repositories;
 
-public class DeliveryRepsoitory: IDeliveryRepository
+public class DeliveryRepository: IDeliveryRepository
 {
     private readonly IMongoCollection<DeliveryDb> _delivery;
-    public DeliveryRepsoitory(WaterDeliveryContext context)
+    public DeliveryRepository(WaterDeliveryContext context)
     {
         _delivery = context.GetCollection<DeliveryDb>("delivery");
     }
     
-    public async Task<string> CreateDeliveryAsync(Delivery delivery, CancellationToken cancellationToken)
+    public async Task<Guid> CreateDeliveryAsync(Delivery delivery, CancellationToken cancellationToken)
     {
         var deliveryDb = delivery.ToDb();
         await _delivery.InsertOneAsync(deliveryDb, cancellationToken: cancellationToken);
@@ -24,19 +24,24 @@ public class DeliveryRepsoitory: IDeliveryRepository
 
     public async Task UpdateDeliveryAsync(Delivery delivery, CancellationToken cancellationToken)
     {
-        await _delivery.ReplaceOneAsync(delivery.Id.ToString(), delivery.ToDb(),
-            cancellationToken: cancellationToken);
+        var db = delivery.ToDb();
+        var update = Builders<DeliveryDb>.Update
+            .Set(d => d.Address, db.Address)
+            .Set(d => d.DeliveryManId, db.DeliveryManId)
+            .Set(d => d.Status, db.Status)
+            .Set(d => d.Order, db.Order);
+        await _delivery.UpdateOneAsync(d => d.Id == delivery.Id, update, cancellationToken: cancellationToken);
     }
 
     public async Task<Delivery> GetDeliveryByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var orderDb = await _delivery.Find(o => o.Id == id.ToString()).FirstOrDefaultAsync(cancellationToken);
+        var orderDb = await _delivery.Find(o => o.Id == id).FirstOrDefaultAsync(cancellationToken);
 
         return orderDb.ToDomain();
     }
 
     public async Task DeleteDeliveryAsync(Guid id, CancellationToken cancellationToken)
     {
-        await _delivery.DeleteOneAsync(d=>d.Id == id.ToString(), cancellationToken: cancellationToken);
+        await _delivery.DeleteOneAsync(d=>d.Id == id, cancellationToken: cancellationToken);
     }
 }

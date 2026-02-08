@@ -14,7 +14,7 @@ public class ProductUnitRepository: IProductUnitRepository
     {
         _productUnit = context.GetCollection<ProductUnitDb>("productUnit");
     }
-    public async Task<string> CreateProductUnitAsync(ProductUnit productUnit, CancellationToken cancellationToken)
+    public async Task<Guid> CreateProductUnitAsync(ProductUnit productUnit, CancellationToken cancellationToken)
     {
         var productUnitDb = productUnit.ToDb();
         await _productUnit.InsertOneAsync(productUnitDb, cancellationToken);
@@ -24,18 +24,22 @@ public class ProductUnitRepository: IProductUnitRepository
 
     public async Task UpdateProductUnitAsync(ProductUnit productUnit, CancellationToken cancellationToken)
     {
-        await _productUnit.ReplaceOneAsync(productUnit.Id.ToString(), productUnit.ToDb(), cancellationToken: cancellationToken);
+        var db = productUnit.ToDb();
+        var update = Builders<ProductUnitDb>.Update
+            .Set(p => p.Name, db.Name)
+            .Set(p => p.QuantityPerUnit, db.QuantityPerUnit);
+        await _productUnit.UpdateOneAsync(p => p.Id == productUnit.Id, update, cancellationToken: cancellationToken);
     }
 
     public async Task<ProductUnit> GetProductUnitAsync(Guid id, CancellationToken cancellationToken)
     {
-        var productUnitDb = await _productUnit.Find(p => p.Id == id.ToString()).FirstOrDefaultAsync(cancellationToken);
+        var productUnitDb = await _productUnit.Find(p => p.Id == id).FirstOrDefaultAsync(cancellationToken);
 
         return productUnitDb.ToDomain();
     }
 
     public async Task DeleteProductUnitAsync(Guid id, CancellationToken cancellationToken)
     {
-        await _productUnit.DeleteOneAsync(p => p.Id == id.ToString(), cancellationToken: cancellationToken);
+        await _productUnit.DeleteOneAsync(p => p.Id == id, cancellationToken: cancellationToken);
     }
 }

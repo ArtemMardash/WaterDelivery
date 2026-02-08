@@ -1,8 +1,6 @@
-using System.Reflection.Metadata;
 using FluentAssertions;
 using WaterDelivery.Backend.Core.Entities;
 using WaterDelivery.Backend.Core.Enums;
-using WaterDelivery.Backend.Core.ValueObjects;
 
 namespace WaterDelivery.Tests;
 
@@ -59,7 +57,7 @@ public class EntitiesTests
         {
             new object[]
             {
-                "Create OrderItem with incorrect quantity",
+                "Create OrderItems with incorrect quantity",
                 new Product("asdfgh", "asscsddcdcscsccdscscsdscs", new List<ProductUnit>(),
                     new ProductUnit(MeasurementUnits.Gram, 10), 10),
                 new ProductUnit(MeasurementUnits.Gram, 100),
@@ -67,7 +65,7 @@ public class EntitiesTests
             },
             new object[]
             {
-                "Create OrderItem with negative quantity",
+                "Create OrderItems with negative quantity",
                 new Product("asdfgh", "asscsddcdcscsccdscscsdscs", new List<ProductUnit>(),
                     new ProductUnit(MeasurementUnits.Gram, 10), 10),
                 new ProductUnit(MeasurementUnits.Gram, 100),
@@ -75,14 +73,14 @@ public class EntitiesTests
             },
             new object[]
             {
-                "Create OrderItem with null product",
+                "Create OrderItems with null product",
                 default(Product)!,
                 new ProductUnit(MeasurementUnits.Gram, 100),
                 10
             },
             new object[]
             {
-                "Create OrderItem with null product unit",
+                "Create OrderItems with null product unit",
                 new Product("asdfgh", "asscsddcdcscsccdscscsdscs", new List<ProductUnit>(),
                     new ProductUnit(MeasurementUnits.Gram, 10), 10),
                 default(ProductUnit)!,
@@ -91,13 +89,15 @@ public class EntitiesTests
         };
 
     [Theory]
-    [InlineData("asdf", UserType.Customer)]
+    [InlineData("asdf", UserType.Customer, "artem.m@gmail.com", "1231234123")]
     [InlineData("asdfdjvfdvdfvfdvfdvdfvdfvdfvdfvdfvfdvdfvdfvdfvdvfdsvsdfvfdvdcasdcdscsdcsccsdcscaca",
-        UserType.Customer)]
-    [InlineData("asdfdfv", UserType.Unknown)]
-    public void Create_User_Should_Fail(string name, UserType userType)
+        UserType.Customer, "artem.m@gmail.com", "1231234123")]
+    [InlineData("asdfdfv", UserType.Unknown, "artem.m@gmail.com", "1231234123")]
+    [InlineData("asdfdfv", UserType.Customer, "artem.mgmail.com", "1231234123")]
+    [InlineData("asdfdfv", UserType.Customer, "artem.mgmail.com", "12312341")]
+    public void Create_User_Should_Fail(string name, UserType userType, string email, string phoneNumber)
     {
-        var test = () => new User(name, userType);
+        var test = () => new User(name, userType, email,phoneNumber);
 
         test.Should().Throw<ArgumentException>();
     }

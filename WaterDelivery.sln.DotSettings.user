@@ -1,10 +1,29 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
+  &lt;Assembly Path="C:\Users\artem\.nuget\packages\mediatr\13.1.0\lib\net8.0\MediatR.dll" /&gt;&#xD;
+&lt;/AssemblyExplorer&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=182fb1d8_002D8136_002D4fbe_002Da565_002D3b9792ea042e/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Create_Address_Should_Success #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.UseCaseTests.AddressUseCaseTests.Create_Address_Should_Success&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.UseCaseTests.AddressUseCaseTests.Get_Address_Should_Success&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.UseCaseTests.BillUseCaseTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=3016371c_002D4bf5_002D49f3_002D8a6d_002Dd83fe64e9376/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="BillUseCaseTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="C:\Users\artem\RiderProjects\WaterDelivery\WaterDelivery.Tests" Presentation="&amp;lt;WaterDelivery.Tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=459fd2d0_002D280b_002D4119_002D8bc6_002Ddc40cba6697f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="UserRepositoryTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.UserRepositoryTests&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9ed548a9_002Dab29_002D4015_002Dbef9_002D50b6b85e397f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Create_User_Should_Fail" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_User_Should_Fail&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d3c6aff4_002D8552_002D4190_002Da6ad_002Db960407f0b62/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Create_User_Should_Fail #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d3c6aff4_002D8552_002D4190_002Da6ad_002Db960407f0b62/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Create_User_Should_Fail #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_User_Should_Fail&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_Product_Unit_Should_Fail&lt;/TestId&gt;&#xD;
@@ -15,5 +34,15 @@
     &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Set_Delivery_Status_Should_Fail&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_Address_Should_Fail&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_Bill_ShouldFail&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.UserRepositoryTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f0d2ebeb_002D4493_002D4873_002D9dad_002D4fe64fba0f27/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Create_User_Should_Success_Async" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.UseCaseTests.UserUseCaseTests&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.UseCaseTests.AddressUseCaseTests.Create_Address_Should_Success&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ff67f1e8_002D3b18_002D4d22_002Db40f_002D44d189710b40/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Get_All_Customers_Async_Should_Success" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="C:\Users\artem\RiderProjects\WaterDelivery\WaterDelivery.Tests" Presentation="&amp;lt;WaterDelivery.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

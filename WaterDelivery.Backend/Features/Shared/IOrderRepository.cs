@@ -4,7 +4,7 @@ namespace WaterDelivery.Backend.Features.Shared;
 
 public interface IOrderRepository
 {
-    public Task<string> CreateOrderAsync(Order order, CancellationToken cancellationToken);
+    public Task<Guid> CreateOrderAsync(Order order, CancellationToken cancellationToken);
 
     public Task UpdateOrderAsync(Order order, CancellationToken cancellationToken);
 

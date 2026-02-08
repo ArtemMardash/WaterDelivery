@@ -1,4 +1,3 @@
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace WaterDelivery.Backend.Infrastructure.Persistence.DbEntities;
@@ -6,10 +5,13 @@ namespace WaterDelivery.Backend.Infrastructure.Persistence.DbEntities;
 public class UserDb
 {
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    public Guid Id { get; set; }
     
     public string Name { get; set; }
     
     public int UserType { get; set; }
+    
+    public string Email { get; set; }
+    
+    public string PhoneNumber { get; set; }
 }

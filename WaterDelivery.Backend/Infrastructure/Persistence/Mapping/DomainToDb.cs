@@ -1,5 +1,4 @@
 using WaterDelivery.Backend.Core.Entities;
-using WaterDelivery.Backend.Core.ValueObjects;
 using WaterDelivery.Backend.Infrastructure.Persistence.DbEntities;
 
 namespace WaterDelivery.Backend.Infrastructure.Persistence.Mapping;
@@ -10,9 +9,11 @@ public static class DomainToDb
     {
         return new UserDb
         {
-            Id = user.Id.ToString(),
+            Id = user.Id,
             Name = user.Name,
-            UserType = (int)user.UserType
+            UserType = (int)user.UserType,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber,
         };
     }
 
@@ -20,7 +21,7 @@ public static class DomainToDb
     {
         return new OrderDb
         {
-            Id = order.Id.ToString(),
+            Id = order.Id,
             CustomerId = order.CustomerId,
             Items = order.Items.Select(o => o.ToDb()).ToList()
         };
@@ -40,7 +41,7 @@ public static class DomainToDb
     {
         return new ProductDb
         {
-            Id = product.Id.ToString(),
+            Id = product.Id,
             Name = product.Name,
             Description = product.Description,
             ProductOptions = product.ProductOptions.Select(p => p.ToDb()).ToList(),
@@ -53,7 +54,7 @@ public static class DomainToDb
     {
         return new ProductUnitDb
         {
-            Id = productUnit.Id.ToString(),
+            Id = productUnit.Id,
             Name = (int)productUnit.Name,
             QuantityPerUnit = productUnit.QuantityPerUnit
         };
@@ -63,12 +64,13 @@ public static class DomainToDb
     {
         return new AddressDb
         {
-            Id = address.Id.ToString(),
+            Id = address.Id,
             Street = address.Street,
             HouseNumber = address.HouseNumber,
             AptNumber = address.AptNumber,
             City = address.City,
-            State = address.State
+            State = address.State,
+            isDeleted = address.IsDeleted
         };
     }
 
@@ -76,7 +78,7 @@ public static class DomainToDb
     {
         return new BillDb
         {
-            Id = bill.Id.ToString(),
+            Id = bill.Id,
             Order = bill.Order.ToDb(),
             CreationDate = bill.CreationDate,
             PaymentDate = bill.PaymentDate,
@@ -88,7 +90,7 @@ public static class DomainToDb
     {
         return new DeliveryDb
         {
-            Id = delivery.Id.ToString(),
+            Id = delivery.Id,
             DeliveryManId = delivery.DeliveryManId,
             Order = delivery.Order.ToDb(),
             Address = delivery.Address.ToDb(),
@@ -100,8 +102,8 @@ public static class DomainToDb
     {
         return new CustomerAddressesDb
         {
-            Id = customerAddresses.Id.ToString(),
-            CustomerId = customerAddresses.Id,
+            Id = customerAddresses.Id,
+            CustomerId = customerAddresses.CustomerId,
             Addresses = customerAddresses.Addresses.Select(a => a.ToDb()).ToList()
         };
     }

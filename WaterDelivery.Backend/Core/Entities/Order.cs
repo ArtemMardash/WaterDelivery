@@ -19,7 +19,7 @@ public class Order
     {
         Id = Guid.NewGuid();
         CustomerId = customerId;
-        Items = orderItems?? new List<OrderItem>();
+        Items = orderItems ?? new List<OrderItem>();
     }
     
 }

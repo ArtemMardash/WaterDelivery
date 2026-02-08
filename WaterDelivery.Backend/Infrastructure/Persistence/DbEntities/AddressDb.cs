@@ -1,4 +1,3 @@
-using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace WaterDelivery.Backend.Infrastructure.Persistence.DbEntities;
@@ -6,8 +5,7 @@ namespace WaterDelivery.Backend.Infrastructure.Persistence.DbEntities;
 public class AddressDb
 {
     [BsonId]
-    [BsonRepresentation(BsonType.ObjectId)]
-    public string Id { get; set; }
+    public Guid Id { get; set; }
     
     public string Street { get; set; }
     
@@ -18,4 +16,6 @@ public class AddressDb
     public string City { get; set; }
     
     public string State { get; set; }
+    
+    public bool isDeleted { get; set; }
 }

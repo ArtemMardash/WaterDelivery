@@ -1,6 +1,4 @@
-using Microsoft.EntityFrameworkCore;
 using MongoDB.Driver;
-using WaterDelivery.Backend.Infrastructure.Persistence.DbEntities;
 
 namespace WaterDelivery.Backend.Infrastructure.Persistence;
 
@@ -18,5 +16,10 @@ public class WaterDeliveryContext
     public IMongoCollection<T> GetCollection<T>(string collectionName)
     {
         return _database.GetCollection<T>(collectionName);
+    }
+
+    public void DeleteDb(string dbName)
+    {
+        _database.Client.DropDatabase(dbName);
     }
 }

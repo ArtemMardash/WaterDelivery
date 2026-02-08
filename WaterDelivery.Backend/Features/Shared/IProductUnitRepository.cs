@@ -4,7 +4,7 @@ namespace WaterDelivery.Backend.Features.Shared;
 
 public interface IProductUnitRepository
 {
-    public Task<string> CreateProductUnitAsync(ProductUnit productUnit, CancellationToken cancellationToken);
+    public Task<Guid> CreateProductUnitAsync(ProductUnit productUnit, CancellationToken cancellationToken);
 
     public Task UpdateProductUnitAsync(ProductUnit productUnit, CancellationToken cancellationToken);
 

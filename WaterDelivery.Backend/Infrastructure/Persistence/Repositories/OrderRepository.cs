@@ -15,7 +15,7 @@ public class OrderRepository: IOrderRepository
         _order = context.GetCollection<OrderDb>("order");
     }
     
-    public async Task<string> CreateOrderAsync(Order order, CancellationToken cancellationToken)
+    public async Task<Guid> CreateOrderAsync(Order order, CancellationToken cancellationToken)
     {
         var orderdb = order.ToDb();
         await _order.InsertOneAsync(orderdb, cancellationToken);
@@ -24,15 +24,19 @@ public class OrderRepository: IOrderRepository
 
     public async Task UpdateOrderAsync(Order order, CancellationToken cancellationToken)
     {
-        await _order.ReplaceOneAsync(order.Id.ToString(), order.ToDb(), cancellationToken: cancellationToken);
+        var db = order.ToDb();
+        var update = Builders<OrderDb>.Update
+            .Set(o => o.CustomerId, db.CustomerId)
+            .Set(o => o.Items, db.Items);
+        await _order.UpdateOneAsync(o=>o.Id == db.Id, update, cancellationToken: cancellationToken);
     }
 
     public async Task<Order> GetOrderByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var filter = Builders<OrderDb>.Filter.Eq(o => o.Id, id.ToString());
+        var filter = Builders<OrderDb>.Filter.Eq(o => o.Id, id);
         var orderDb = await _order.Find(filter).FirstOrDefaultAsync(cancellationToken);
 
-        return orderDb.ToDomain();
+        return orderDb != null ? orderDb.ToDomain() : throw new InvalidOperationException($"no such order with id {id}");
     }
 
     public async Task<List<Order>> GetAllCustomerOrdersAsync(Guid customerId, CancellationToken cancellationToken)
@@ -44,6 +48,6 @@ public class OrderRepository: IOrderRepository
 
     public async Task DeleteOrderAsync(Guid id, CancellationToken cancellationToken)
     {
-        await _order.DeleteOneAsync(o => o.Id == id.ToString(), cancellationToken: cancellationToken);
+        await _order.DeleteOneAsync(o => o.Id == id, cancellationToken: cancellationToken);
     }
 }

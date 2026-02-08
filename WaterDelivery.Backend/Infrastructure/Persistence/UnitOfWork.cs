@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Mvc.Formatters.Xml;
-using MongoDB.Driver;
-using WaterDelivery.Backend.Infrastructure.Persistence.Interfaces;
+using WaterDelivery.Backend.Core.Interfaces;
 
 namespace WaterDelivery.Backend.Infrastructure.Persistence;
 
@@ -22,7 +20,7 @@ public class UnitOfWork: IUnitOfWork
         
     }
 
-    public Task SaveChangesAsync()
+    public Task SaveChangesAsync(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }

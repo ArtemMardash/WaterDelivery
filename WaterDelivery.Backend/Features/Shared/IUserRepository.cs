@@ -4,7 +4,7 @@ namespace WaterDelivery.Backend.Features.Shared;
 
 public interface IUserRepository
 {
-    public Task<string> CreateUserAsync(User user, CancellationToken cancellationToken);
+    public Task<Guid> CreateUserAsync(User user, CancellationToken cancellationToken);
 
     public Task UpdateUserAsync(User user, CancellationToken cancellationToken);
 
@@ -15,4 +15,6 @@ public interface IUserRepository
     public Task<List<User>> GetAllCustomersAsync(CancellationToken cancellationToken);
 
     public Task DeleteUserAsync(Guid id,CancellationToken cancellationToken);
+
+    public Task<bool> IsUserExists(User user, CancellationToken cancellationToken);
 }

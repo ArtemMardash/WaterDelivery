@@ -15,7 +15,7 @@ public class ProductRepository: IProductRepository
         _product = context.GetCollection<ProductDb>("product");
     }
     
-    public async Task<string> CreateProductAsync(Product product, CancellationToken cancellationToken)
+    public async Task<Guid> CreateProductAsync(Product product, CancellationToken cancellationToken)
     {
         var productDb = product.ToDb();
         await _product.InsertOneAsync(productDb, cancellationToken: cancellationToken);
@@ -25,12 +25,20 @@ public class ProductRepository: IProductRepository
 
     public async  Task UpdateProductAsync(Product product, CancellationToken cancellationToken)
     {
-        await _product.ReplaceOneAsync(product.Id.ToString(), product.ToDb(), cancellationToken: cancellationToken);
+        var db = product.ToDb();
+        var update = Builders<ProductDb>.Update
+            .Set(p => p.Description, db.Description)
+            .Set(p => p.DefaultUnit, db.DefaultUnit)
+            .Set(p => p.Name, db.Name)
+            .Set(p => p.ProductOptions, db.ProductOptions)
+            .Set(p => p.Id, db.Id)
+            .Set(p => p.DefaultUnitPrice, db.DefaultUnitPrice);
+        await _product.UpdateOneAsync(p => p.Id == product.Id, update, cancellationToken: cancellationToken);
     }
 
     public async Task<Product> GetProductByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var filter = Builders<ProductDb>.Filter.Eq(p => p.Id, id.ToString());
+        var filter = Builders<ProductDb>.Filter.Eq(p => p.Id, id);
         var product = await _product.Find(filter).FirstOrDefaultAsync(cancellationToken);
 
         return product.ToDomain();
@@ -38,6 +46,6 @@ public class ProductRepository: IProductRepository
 
     public async Task DeleteProductAsync(Guid id, CancellationToken cancellationToken)
     {
-        await _product.DeleteOneAsync(p => p.Id == id.ToString(), cancellationToken: cancellationToken);
+        await _product.DeleteOneAsync(p => p.Id == id, cancellationToken: cancellationToken);
     }
 }

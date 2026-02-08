@@ -1,7 +1,6 @@
-using WaterDelivery.Backend.Core.Entities;
+using WaterDelivery.Backend.Core.Interfaces;
 using WaterDelivery.Backend.Features.Shared;
 using WaterDelivery.Backend.Infrastructure.Persistence;
-using WaterDelivery.Backend.Infrastructure.Persistence.Interfaces;
 using WaterDelivery.Backend.Infrastructure.Persistence.Repositories;
 
 namespace WaterDelivery.Backend.Infrastructure;
@@ -14,12 +13,13 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<ICustomerAddressesRepository, CustomerAddressesRepository>();
         services.AddScoped<IAddressRepository, AddressRepository>();
-        services.AddScoped<IBillRepsoitory, BillRepository>();
-        services.AddScoped<IDeliveryRepository, DeliveryRepsoitory>();
+        services.AddScoped<IBillRepository, BillRepository>();
+        services.AddScoped<IDeliveryRepository, DeliveryRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IProductUnitRepository, ProductUnitRepository>();
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        
         services.AddSingleton<WaterDeliveryContext>(sp =>
         {
             var config = sp.GetRequiredService<IConfiguration>();

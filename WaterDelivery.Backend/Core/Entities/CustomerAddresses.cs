@@ -1,5 +1,3 @@
-using WaterDelivery.Backend.Core.ValueObjects;
-
 namespace WaterDelivery.Backend.Core.Entities;
 
 public class CustomerAddresses
