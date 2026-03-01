@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wt-backend
+  template:
+    metadata:
+      labels:
+        app: wt-backend
+    spec:
+      containers:
+        - name: backend-container
+          image: delivery-backend:v2
+          imagePullPolicy: Never  #Important, this not allowes to download from internet
+          ports:
+            - containerPort: 80
