@@ -70,7 +70,7 @@ public static class DomainToDb
             AptNumber = address.AptNumber,
             City = address.City,
             State = address.State,
-            isDeleted = address.IsDeleted
+            IsDeleted = address.IsDeleted
         };
     }
 

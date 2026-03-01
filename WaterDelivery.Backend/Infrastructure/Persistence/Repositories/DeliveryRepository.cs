@@ -37,6 +37,11 @@ public class DeliveryRepository: IDeliveryRepository
     {
         var orderDb = await _delivery.Find(o => o.Id == id).FirstOrDefaultAsync(cancellationToken);
 
+        if (orderDb == null)
+        {
+            throw new InvalidOperationException("There is no delivery with such Id");
+        }
+
         return orderDb.ToDomain();
     }
 

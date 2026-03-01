@@ -17,5 +17,5 @@ public class AddressDb
     
     public string State { get; set; }
     
-    public bool isDeleted { get; set; }
+    public bool IsDeleted { get; set; }
 }

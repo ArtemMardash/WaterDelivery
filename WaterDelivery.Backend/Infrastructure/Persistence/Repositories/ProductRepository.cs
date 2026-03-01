@@ -40,7 +40,11 @@ public class ProductRepository: IProductRepository
     {
         var filter = Builders<ProductDb>.Filter.Eq(p => p.Id, id);
         var product = await _product.Find(filter).FirstOrDefaultAsync(cancellationToken);
-
+        if (product == null)
+        {
+            throw new InvalidOperationException("There is no product with such Id");
+        }
+        
         return product.ToDomain();
     }
 

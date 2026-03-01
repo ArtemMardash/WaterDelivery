@@ -10,7 +10,7 @@ using WaterDelivery.Backend.Infrastructure.Persistence.Repositories;
 namespace WaterDelivery.Tests.RepositoryTests;
 
 //TODO fail methods for all exceptions in repository
-public class ProductUnitRepositoryTests: BaseTest
+public class ProductUnitRepositoryTests : BaseTest
 {
     private readonly WaterDeliveryContext _context;
     private readonly IProductUnitRepository _productUnitRepository;
@@ -45,7 +45,7 @@ public class ProductUnitRepositoryTests: BaseTest
 
         await _productUnitRepository.UpdateProductUnitAsync(productUnitNew, CancellationToken.None);
         var productUnitAsync = await _productUnitRepository.GetProductUnitAsync(resultId, CancellationToken.None);
-        
+
         productUnitAsync.Id.Should().Be(productUnitNew.Id);
         productUnitAsync.QuantityPerUnit.Should().Be(productUnitNew.QuantityPerUnit);
         productUnitAsync.Name.Should().Be(productUnitNew.Name);
@@ -59,12 +59,20 @@ public class ProductUnitRepositoryTests: BaseTest
 
         var productUnitById = await _productUnitRepository.GetProductUnitAsync(resultId, CancellationToken.None);
 
-        
+
         productUnitById.Id.Should().Be(productUnit.Id);
         productUnitById.QuantityPerUnit.Should().Be(productUnit.QuantityPerUnit);
         productUnitById.Name.Should().Be(productUnit.Name);
     }
-    
+
+    [Fact]
+    public async Task Get_Bill_By_Id_Async_ShouldFail()
+    {
+        var test = async () => await _productUnitRepository.GetProductUnitAsync(Guid.NewGuid(), CancellationToken.None);
+
+        await test.Should().ThrowAsync<InvalidOperationException>();
+    }
+
     [Fact]
     public async Task Delete_Bill_Should_Success()
     {
@@ -75,7 +83,7 @@ public class ProductUnitRepositoryTests: BaseTest
 
         (await _productUnits.Find(u => u.Id == resultId).FirstOrDefaultAsync(CancellationToken.None)).Should().BeNull();
     }
-    
+
     public override void Dispose()
     {
         _context.DeleteDb(_dbName);

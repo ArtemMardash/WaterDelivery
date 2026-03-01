@@ -40,6 +40,11 @@ public class CustomerAddressesRepository : ICustomerAddressesRepository
         var customerAddressDb =
             await _customerAddresses.Find(c => c.Id == id).FirstOrDefaultAsync(cancellationToken);
 
+        if (customerAddressDb == null)
+        {
+            throw new InvalidOperationException("There is no customerAddresses with such Id");
+        }
+
         return customerAddressDb.ToDomain();
     }
 
@@ -47,6 +52,10 @@ public class CustomerAddressesRepository : ICustomerAddressesRepository
     {
         var customerAddresses =
             await _customerAddresses.Find(c => c.CustomerId == customerId).FirstOrDefaultAsync(cancellationToken);
+        if (customerAddresses == null)
+        {
+            throw new InvalidOperationException($"Customer with Id {customerId} doesn't have any addresses");
+        }
 
         return customerAddresses.Addresses.Select(a => a.ToDomain()).ToList();
     }

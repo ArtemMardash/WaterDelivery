@@ -70,6 +70,14 @@ public class UserRepositoryTests : BaseTest
     }
 
     [Fact]
+    public async Task Get_User_By_Id_Async_Should_Fail()
+    {
+        var test = async () => await _userRepository.GetUserByIdAsync(Guid.NewGuid(), CancellationToken.None);
+
+        await test.Should().ThrowAsync<InvalidOperationException>();
+    }
+
+    [Fact]
     public async Task Get_All_Workers_Async_Should_Success()
     {
         var faker = new Faker("en");

@@ -64,6 +64,16 @@ public class OrderRepositoryTests: BaseTest
         orderById.CustomerId.Should().Be(order.CustomerId);
         orderById.Id.Should().Be(order.Id);
     }
+    
+    [Fact]
+    public async Task Get_Order_By_Id_Async_Should_Fail()
+    {
+        var id = Guid.NewGuid();
+
+        var test = async ()=> await _orderRepository.GetOrderByIdAsync(id, CancellationToken.None);
+
+        await test.Should().ThrowAsync<InvalidOperationException>();
+    }
 
     [Fact]
     public async Task Get_All_Customer_Orders_ShouldSuccess()

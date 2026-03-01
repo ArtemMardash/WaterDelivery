@@ -9,7 +9,7 @@ public static class DbToDomain
     public static Address ToDomain(this AddressDb addressDb)
     {
         return new Address(addressDb.Id, addressDb.Street, addressDb.HouseNumber, addressDb.AptNumber, addressDb.City,
-            addressDb.State, addressDb.isDeleted);
+            addressDb.State, addressDb.IsDeleted);
     }
 
     public static Bill ToDomain(this BillDb billDb)

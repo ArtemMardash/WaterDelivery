@@ -9,7 +9,7 @@
     &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.UseCaseTests.BillUseCaseTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=3016371c_002D4bf5_002D49f3_002D8a6d_002Dd83fe64e9376/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="BillUseCaseTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=3016371c_002D4bf5_002D49f3_002D8a6d_002Dd83fe64e9376/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="BillUseCaseTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Project Location="C:\Users\artem\RiderProjects\WaterDelivery\WaterDelivery.Tests" Presentation="&amp;lt;WaterDelivery.Tests&amp;gt;" /&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=459fd2d0_002D280b_002D4119_002D8bc6_002Ddc40cba6697f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="UserRepositoryTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
@@ -20,6 +20,11 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9ed548a9_002Dab29_002D4015_002Dbef9_002D50b6b85e397f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Create_User_Should_Fail" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.EntitiesTests.Create_User_Should_Fail&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=a3987453_002Dc825_002D40da_002D826c_002D3e556244884f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Update_Address_Use_Case_Should_Success" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::103BE24D-E3C2-4678-A7EB-E95B57A55620::net8.0::WaterDelivery.Tests.IntegrationTests.AddressUseCases&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	

@@ -10,7 +10,7 @@ using WaterDelivery.Backend.Infrastructure.Persistence.Repositories;
 namespace WaterDelivery.Tests.RepositoryTests;
 
 //TODO fail methods for all exceptions in repository
-public class DeliveryRepositoryTests: BaseTest
+public class DeliveryRepositoryTests : BaseTest
 {
     private readonly WaterDeliveryContext _context;
     private readonly IDeliveryRepository _deliveryRepository;
@@ -82,7 +82,16 @@ public class DeliveryRepositoryTests: BaseTest
         deliveryById.Status.Should().Be(delivery.Status);
         deliveryById.Id.Should().Be(delivery.Id);
     }
-    
+
+    [Fact]
+    public async Task Get_Delivery_By_Id_Async_ShouldFail()
+    {
+        var id = Guid.NewGuid();
+        var test = async () => await _deliveryRepository.GetDeliveryByIdAsync(id, CancellationToken.None);
+
+        await test.Should().ThrowAsync<InvalidOperationException>();
+    }
+
     [Fact]
     public async Task Delete_Delivery_Should_Success()
     {
@@ -93,7 +102,8 @@ public class DeliveryRepositoryTests: BaseTest
 
         (await _delivery.Find(u => u.Id == resultId).FirstOrDefaultAsync(CancellationToken.None)).Should().BeNull();
     }
-    
+
+
     public override void Dispose()
     {
         _context.DeleteDb(_dbName);

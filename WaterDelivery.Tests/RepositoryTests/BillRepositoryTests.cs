@@ -1,5 +1,6 @@
 using FluentAssertions;
 using MongoDB.Driver;
+using NSubstitute.ExceptionExtensions;
 using WaterDelivery.Backend.Core.Entities;
 using WaterDelivery.Backend.Core.Enums;
 using WaterDelivery.Backend.Features.Shared;
@@ -10,7 +11,7 @@ using WaterDelivery.Backend.Infrastructure.Persistence.Repositories;
 namespace WaterDelivery.Tests.RepositoryTests;
 
 //TODO fail methods for all exceptions in repository
-public class BillRepositoryTests: BaseTest
+public class BillRepositoryTests : BaseTest
 {
     private readonly WaterDeliveryContext _context;
     private readonly IBillRepository _billRepository;
@@ -28,7 +29,8 @@ public class BillRepositoryTests: BaseTest
     [Fact]
     public async Task Create_Bill_Async_Should_Success()
     {
-        var bill = new Bill(new Order(customerId: Guid.NewGuid(), orderItems: new List<OrderItem>()), DateTime.Now.AddMinutes(10),
+        var bill = new Bill(new Order(customerId: Guid.NewGuid(), orderItems: new List<OrderItem>()),
+            DateTime.Now.AddMinutes(10),
             DateTime.Now.AddDays(3), BillStatus.WaitForPayment);
         var resultId = await _billRepository.CreateBillAsync(bill, CancellationToken.None);
 
@@ -38,12 +40,14 @@ public class BillRepositoryTests: BaseTest
     [Fact]
     public async Task Update_Bill_Async_Should_Success()
     {
-        var bill = new Bill(new Order(customerId: Guid.NewGuid(), orderItems: new List<OrderItem>()), DateTime.UtcNow.AddMinutes(10),
+        var bill = new Bill(new Order(customerId: Guid.NewGuid(), orderItems: new List<OrderItem>()),
+            DateTime.UtcNow.AddMinutes(10),
             DateTime.UtcNow.AddDays(3), BillStatus.WaitForPayment);
         var resultId = await _billRepository.CreateBillAsync(bill, CancellationToken.None);
 
 
-        var billNew = new Bill(resultId, new Order(customerId: Guid.NewGuid(), orderItems: new List<OrderItem>()), DateTime.UtcNow.AddDays(-2),
+        var billNew = new Bill(resultId, new Order(customerId: Guid.NewGuid(), orderItems: new List<OrderItem>()),
+            DateTime.UtcNow.AddDays(-2),
             DateTime.UtcNow, BillStatus.Paid);
 
         await _billRepository.UpdateBillAsync(billNew, CancellationToken.None);
@@ -58,7 +62,8 @@ public class BillRepositoryTests: BaseTest
     [Fact]
     public async Task Get_Bill_By_Id_Async_ShouldSuccess()
     {
-        var bill = new Bill(new Order(customerId: Guid.NewGuid(), orderItems: new List<OrderItem>()), DateTime.UtcNow.AddMinutes(10),
+        var bill = new Bill(new Order(customerId: Guid.NewGuid(), orderItems: new List<OrderItem>()),
+            DateTime.UtcNow.AddMinutes(10),
             DateTime.UtcNow.AddDays(3), BillStatus.WaitForPayment);
         var resultId = await _billRepository.CreateBillAsync(bill, CancellationToken.None);
 
@@ -71,11 +76,21 @@ public class BillRepositoryTests: BaseTest
         billById.PaymentDate.Should().BeSameDateAs(bill.PaymentDate.Value);
         billById.Id.Should().Be(bill.Id);
     }
-    
+
+    [Fact]
+    public async Task Get_Bill_By_Id_Async_Should_Fail()
+    {
+        var id = Guid.NewGuid();
+
+        var test = () => _billRepository.GetBillByIdAsync(id, CancellationToken.None);
+        await test.Should().ThrowAsync<InvalidOperationException>();
+    }
+
     [Fact]
     public async Task Delete_Bill_Should_Success()
     {
-        var bill = new Bill(new Order(customerId: Guid.NewGuid(), orderItems: new List<OrderItem>()), DateTime.Now.AddMinutes(10),
+        var bill = new Bill(new Order(customerId: Guid.NewGuid(), orderItems: new List<OrderItem>()),
+            DateTime.Now.AddMinutes(10),
             DateTime.Now.AddDays(3), BillStatus.WaitForPayment);
         var resultId = await _billRepository.CreateBillAsync(bill, CancellationToken.None);
 
@@ -83,7 +98,17 @@ public class BillRepositoryTests: BaseTest
 
         (await _bills.Find(u => u.Id == resultId).FirstOrDefaultAsync(CancellationToken.None)).Should().BeNull();
     }
-    
+
+    [Fact]
+    public async Task Delete_Bill_Should_Fail()
+    {
+        var resultId = Guid.NewGuid();
+
+        await _billRepository.DeleteAsync(resultId, CancellationToken.None);
+
+        (await _bills.Find(u => u.Id == resultId).FirstOrDefaultAsync(CancellationToken.None)).Should().BeNull();
+    }
+
     public override void Dispose()
     {
         _context.DeleteDb(_dbName);

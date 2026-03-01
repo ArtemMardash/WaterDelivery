@@ -37,6 +37,10 @@ public class BillRepository: IBillRepository
     public async Task<Bill> GetBillByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var billDb = await _bill.Find(b => b.Id == id).FirstOrDefaultAsync(cancellationToken);
+        if (billDb == null)
+        {
+            throw new InvalidOperationException($"There is no billDb with Id {id}");
+        }
 
         return billDb.ToDomain();
     }

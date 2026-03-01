@@ -37,7 +37,7 @@ public class AddressRepository: IAddressRepository
 
     public async Task<Address> GetAddressAsync(Guid id, CancellationToken cancellationToken)
     {
-        var addressDb = await _address.Find(a => a.Id == id && a.isDeleted == false).FirstOrDefaultAsync(cancellationToken);
+        var addressDb = await _address.Find(a => a.Id == id && a.IsDeleted == false).FirstOrDefaultAsync(cancellationToken);
         if (addressDb == null)
         {
             throw new InvalidOperationException("There is no Address with such Id");
@@ -48,9 +48,9 @@ public class AddressRepository: IAddressRepository
 
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        var update = Builders<AddressDb>.Update.Set(a => a.isDeleted, true);
+        var update = Builders<AddressDb>.Update.Set(a => a.IsDeleted, true);
 
-        await _address.UpdateOneAsync(a => a.Id == id && a.isDeleted == false, update,
+        await _address.UpdateOneAsync(a => a.Id == id && a.IsDeleted == false, update,
             cancellationToken: cancellationToken);
     }
 }

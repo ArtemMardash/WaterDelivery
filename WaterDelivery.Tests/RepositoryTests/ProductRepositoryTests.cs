@@ -78,6 +78,14 @@ public class ProductRepositoryTests: BaseTest
         productById.DefaultUnitPrice.Should().Be(product.DefaultUnitPrice);
         productById.Id.Should().Be(product.Id);
     }
+
+    [Fact]
+    public async Task Get_Product_By_Id_Should_Fail()
+    {
+        var test = async () => await _productRepository.GetProductByIdAsync(Guid.NewGuid(), CancellationToken.None);
+
+        await test.Should().ThrowAsync<InvalidOperationException>();
+    }
     
     [Fact]
     public async Task Delete_Product_Should_Success()

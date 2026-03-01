@@ -13,4 +13,10 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Components\Auth\" />
+      <Folder Include="Components\Cart\" />
+      <Folder Include="Components\Catalog\" />
+    </ItemGroup>
+
 </Project>

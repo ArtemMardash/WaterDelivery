@@ -34,7 +34,11 @@ public class ProductUnitRepository: IProductUnitRepository
     public async Task<ProductUnit> GetProductUnitAsync(Guid id, CancellationToken cancellationToken)
     {
         var productUnitDb = await _productUnit.Find(p => p.Id == id).FirstOrDefaultAsync(cancellationToken);
-
+        if (productUnitDb == null)
+        {
+            throw new InvalidOperationException("There is no productUnit with such Id");
+        }
+        
         return productUnitDb.ToDomain();
     }
 

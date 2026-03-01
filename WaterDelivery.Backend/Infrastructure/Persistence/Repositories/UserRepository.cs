@@ -41,7 +41,11 @@ public class UserRepository : IUserRepository
     public async Task<User> GetUserByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         var userDb = await _users.Find(u => u.Id == id).FirstOrDefaultAsync(cancellationToken);
-
+        if (userDb == null)
+        {
+            throw new InvalidOperationException("There is no user with such Id");
+        }
+        
         return userDb.ToDomain();
     }
 

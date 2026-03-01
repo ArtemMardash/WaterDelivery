@@ -9,7 +9,7 @@ using WaterDelivery.Backend.Infrastructure.Persistence.Repositories;
 namespace WaterDelivery.Tests.RepositoryTests;
 
 //TODO fail methods for all exceptions in repository
-public class AddressRepositoryTests: BaseTest
+public class AddressRepositoryTests : BaseTest
 {
     private readonly WaterDeliveryContext _context;
     private readonly IAddressRepository _addressRepository;
@@ -70,7 +70,7 @@ public class AddressRepositoryTests: BaseTest
         addressById.Id.Should().Be(address.Id);
         addressById.State.Should().Be(address.State);
     }
-    
+
     [Fact]
     public async Task Delete_Address_Should_Success()
     {
@@ -79,9 +79,29 @@ public class AddressRepositoryTests: BaseTest
 
         await _addressRepository.DeleteAsync(resultId, CancellationToken.None);
 
-        (await _address.Find(u => u.Id == resultId && u.isDeleted == false).FirstOrDefaultAsync(CancellationToken.None)).Should().BeNull();
+        (await _address.Find(u => u.Id == resultId && u.IsDeleted == false)
+                .FirstOrDefaultAsync(CancellationToken.None))
+            .Should()
+            .BeNull();
+
+        (await _address.Find(u => u.Id == resultId && u.IsDeleted == true)
+                .FirstOrDefaultAsync(CancellationToken.None))
+            .Should()
+            .NotBeNull();
     }
-    
+
+    [Fact]
+    public async Task Delete_Address_Should_Fail()
+    {
+        var id = Guid.NewGuid();
+        await _addressRepository.DeleteAsync(id, CancellationToken.None);
+
+        (await _address.Find(u => u.Id == id && u.IsDeleted == false)
+                .FirstOrDefaultAsync(CancellationToken.None))
+            .Should()
+            .BeNull();
+    }
+
     public override void Dispose()
     {
         _context.DeleteDb(_dbName);
