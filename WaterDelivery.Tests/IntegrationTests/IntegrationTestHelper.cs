@@ -1,3 +1,4 @@
+using AspNetCore.Identity.Mongo;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
@@ -8,6 +9,7 @@ using WaterDelivery.Backend.Core.Enums;
 using WaterDelivery.Backend.Core.Interfaces;
 using WaterDelivery.Backend.Features.Shared;
 using WaterDelivery.Backend.Infrastructure.Persistence;
+using WaterDelivery.Backend.Infrastructure.Persistence.DbEntities;
 using WaterDelivery.Backend.Infrastructure.Persistence.Repositories;
 
 namespace WaterDelivery.Tests.IntegrationTests;
@@ -39,6 +41,11 @@ public class IntegrationTestHelper
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IProductUnitRepository, ProductUnitRepository>();
 
+        services.AddIdentityMongoDbProvider<UserDb>(opt =>
+        {
+            opt.ConnectionString = "mongodb://root:password@localhost:27017/WaterDelivery?authSource=admin";
+        });
+        
         try
         {
             BsonSerializer.RegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));

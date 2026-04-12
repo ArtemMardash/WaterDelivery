@@ -30,12 +30,17 @@ public class UserRepository : IUserRepository
         }
 
         var db = user.ToDb();
+
         var update = Builders<UserDb>.Update
             .Set(u => u.PhoneNumber, db.PhoneNumber)
             .Set(u => u.UserType, db.UserType)
             .Set(u => u.Email, db.Email)
             .Set(u => u.Name, db.Name);
-        await _users.ReplaceOneAsync(u => u.Uid == user.Id, user.ToDb(), cancellationToken: cancellationToken);
+
+        await _users.UpdateOneAsync(
+            u => u.Uid == user.Id,
+            update,
+            cancellationToken: cancellationToken);
     }
 
     public async Task<User> GetUserByIdAsync(Guid id, CancellationToken cancellationToken)

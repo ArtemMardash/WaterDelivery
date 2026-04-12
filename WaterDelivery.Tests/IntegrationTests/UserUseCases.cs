@@ -7,6 +7,7 @@ using WaterDelivery.Backend.Core.Interfaces;
 using WaterDelivery.Backend.Features.Shared;
 using WaterDelivery.Backend.Features.Users.Dtos;
 using WaterDelivery.Backend.Infrastructure.Persistence;
+using WaterDelivery.Backend.Infrastructure.Persistence.DbEntities;
 
 namespace WaterDelivery.Tests.IntegrationTests;
 
@@ -69,12 +70,12 @@ public class UserUseCases: IDisposable
         await _mediator.Send(request, CancellationToken.None);
 
         var user = await _waterDeliveryContext
-            .GetCollection<User>("users")
-            .Find(u => u.Id == result)
+            .GetCollection<UserDb>("users")
+            .Find(u => u.Uid == result)
             .FirstOrDefaultAsync();
 
         user.Email.Should().Be("arte.m5@gmail.com");
-        user.UserType.Should().Be(UserType.Customer);
+        user.UserType.Should().Be((int)UserType.Customer);
         user.PhoneNumber.Should().Be("1234567890");
         user.Name.Should().Be("Artem2");
     }

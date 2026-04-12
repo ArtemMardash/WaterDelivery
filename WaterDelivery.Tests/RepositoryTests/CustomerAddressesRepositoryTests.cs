@@ -76,27 +76,23 @@ public class CustomerAddressesRepositoryTests : BaseTest
     }
 
     [Fact]
-    public async Task Get_All_Customer_Addresses_ShouldSuccess()
+    public async Task Get_All_Customer_Addresses_Should_Succeed()
     {
-        var customerAddress = new CustomerAddresses(customerId: Guid.NewGuid(), new List<Address>());
-        var resultId =
-            await _customerAddressesRepository.CreateCustomerAddressesAsync(customerAddress, CancellationToken.None);
+        var customerAddress = new CustomerAddresses(Guid.NewGuid(), new List<Address>());
 
-        var customerAddresses =
-            await _customerAddressesRepository.GetAllCustomerAddresses(customerAddress.CustomerId,
-                CancellationToken.None);
+        var resultId = await _customerAddressesRepository
+            .CreateCustomerAddressesAsync(customerAddress, CancellationToken.None);
 
-        customerAddresses.Should().BeEmpty();
+        var customerAddresses = await _customerAddressesRepository
+            .GetAllCustomerAddresses(customerAddress.CustomerId, CancellationToken.None);
+
+        customerAddresses.Should().NotBeNull();
+        customerAddresses.Should().HaveCount(1);
+        customerAddresses[0].Id.Should().Be(resultId);
+        customerAddresses[0].CustomerId.Should().Be(customerAddress.CustomerId);
+        customerAddresses[0].Addresses.Should().BeEmpty();
     }
-
-    [Fact]
-    public async Task Get_All_Customer_Addresses_Should_Fail()
-    {
-        var test = async () =>
-            await _customerAddressesRepository.GetAllCustomerAddresses(Guid.NewGuid(), CancellationToken.None);
-
-        await test.Should().ThrowAsync<InvalidOperationException>();
-    }
+    
 
     [Fact]
     public async Task Delete_CustomerAddress_Should_Success()

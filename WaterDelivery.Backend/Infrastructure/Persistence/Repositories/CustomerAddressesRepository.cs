@@ -52,10 +52,6 @@ public class CustomerAddressesRepository : ICustomerAddressesRepository
     {
         var customerAddresses =
             await _customerAddresses.Find(c => c.CustomerId == customerId).ToListAsync(cancellationToken);
-        if (customerAddresses == null)
-        {
-            throw new InvalidOperationException($"Customer with Id {customerId} doesn't have any addresses");
-        }
 
         return customerAddresses.Select(c => c.ToDomain()).ToList();
     }
