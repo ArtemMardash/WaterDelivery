@@ -1,0 +1,10 @@
+namespace WaterDelivery.Contracts.Orders.Dtos;
+
+public class GetOrderResultDto
+{
+    public Guid Id { get; set; }
+    
+    public Guid CustomerId { get; set; }
+
+    public List<OrderItemDto> Items { get; set; } 
+}

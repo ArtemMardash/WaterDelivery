@@ -2,7 +2,7 @@ using System.Security.Claims;
 using Mediator;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
-using WaterDelivery.Backend.Features.GoogleAuth.Dtos;
+using WaterDelivery.Contracts.GoogleAuth.Dtos;
 
 namespace WaterDelivery.Backend.Features.GoogleAuth;
 
@@ -37,7 +37,7 @@ public static class GoogleLoginController
                 {
                     var tokens = await mediator.Send(request, cancellationToken);
                         
-                    return Results.Redirect("http://localhost:5167/place-order");
+                    return Results.Redirect("http://localhost:5167/proceed-to-checkout");
                 }
                 catch (Exception Ex)
                 {

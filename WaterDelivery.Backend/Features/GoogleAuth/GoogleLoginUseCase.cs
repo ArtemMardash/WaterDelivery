@@ -1,9 +1,9 @@
 using Mediator;
 using Microsoft.AspNetCore.Identity;
-using WaterDelivery.Backend.Core.Enums;
-using WaterDelivery.Backend.Features.GoogleAuth.Dtos;
 using WaterDelivery.Backend.Features.Shared;
 using WaterDelivery.Backend.Infrastructure.Persistence.DbEntities;
+using WaterDelivery.Contracts.Enums;
+using WaterDelivery.Contracts.GoogleAuth.Dtos;
 
 namespace WaterDelivery.Backend.Features.GoogleAuth;
 

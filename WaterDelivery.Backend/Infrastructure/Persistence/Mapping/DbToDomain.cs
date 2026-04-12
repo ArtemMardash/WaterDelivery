@@ -1,6 +1,6 @@
 using WaterDelivery.Backend.Core.Entities;
-using WaterDelivery.Backend.Core.Enums;
 using WaterDelivery.Backend.Infrastructure.Persistence.DbEntities;
+using WaterDelivery.Contracts.Enums;
 
 namespace WaterDelivery.Backend.Infrastructure.Persistence.Mapping;
 
@@ -56,5 +56,10 @@ public static class DbToDomain
     {
         return new Delivery(deliveryDb.Id, deliveryDb.DeliveryManId, deliveryDb.Order.ToDomain(),
             deliveryDb.Address.ToDomain(), (DeliveryStatus)deliveryDb.Status);
+    }
+
+    public static Cart ToDomain(this CartDb cartDb)
+    {
+        return new Cart(cartDb.CustomerId, cartDb.Items);
     }
 }

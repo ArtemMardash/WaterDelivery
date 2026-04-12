@@ -2,11 +2,11 @@ namespace WaterDelivery.UI.Components.Cart;
 
 public class CartService
 {
-    private readonly List<CartItem> _items = new();
+    private static readonly List<CartItem> _items = new();
  
-    public IReadOnlyList<CartItem> Items => _items.AsReadOnly();
+    public static IReadOnlyList<CartItem> Items => _items.AsReadOnly();
  
-    public decimal Total => _items.Sum(x => x.Price * x.Quantity);
+    public static decimal Total => _items.Sum(x => x.Price * x.Quantity);
  
     public int Count => _items.Sum(x => x.Quantity);
  

@@ -1,6 +1,6 @@
 using Mediator;
-using WaterDelivery.Backend.Features.Orders.Dtos;
 using WaterDelivery.Backend.Features.Shared;
+using WaterDelivery.Contracts.Orders.Dtos;
 
 namespace WaterDelivery.Backend.Features.Orders;
 

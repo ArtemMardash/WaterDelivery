@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using WaterDelivery.Backend.Core.Interfaces;
 using WaterDelivery.Backend.Core.S3;
-using WaterDelivery.Backend.Features.S3.Dtos;
+using WaterDelivery.Contracts.S3.Dtos;
 
 namespace WaterDelivery.Backend.Features.S3;
 

@@ -1,5 +1,5 @@
-using WaterDelivery.Backend.Core.Enums;
 using WaterDelivery.Backend.Infrastructure.Extensions;
+using WaterDelivery.Contracts.Enums;
 
 namespace WaterDelivery.Backend.Core.Entities;
 

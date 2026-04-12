@@ -66,4 +66,13 @@ public class ProductRepository: IProductRepository
 
         return products.Select(p => p.ToDomain()).ToList();
     }
+
+    public async Task<List<Product>> GetProductsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken)
+    {
+        var filter = Builders<ProductDb>.Filter.In(p => p.Id, ids);
+
+        var result = await _product.Find(filter).ToListAsync(cancellationToken);
+
+        return result.Select(r => r.ToDomain()).ToList();
+    }
 }

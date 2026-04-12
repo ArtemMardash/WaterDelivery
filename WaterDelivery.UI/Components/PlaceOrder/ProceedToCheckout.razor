@@ -1,0 +1,251 @@
+@page "/proceed-to-checkout"
+@using System.Net
+@using System.Security.Claims
+@using WaterDelivery.Backend.Core.Entities
+@using WaterDelivery.Contracts.Addresses.Dtos
+@using WaterDelivery.Contracts.CustomersAddresses.Dtos
+@using WaterDelivery.Contracts.Products.Dtos
+@using WaterDelivery.Contracts.ProductUnits.Dtos
+@using WaterDelivery.UI.Components.Cart
+@inject NavigationManager Navigation
+@inject CartService CartService
+@inject IHttpClientFactory HttpClientFactory
+@rendermode InteractiveServer
+
+<PageTitle>Secure Checkout</PageTitle>
+
+<div class="place-order-layout">
+    <div class="place-order-container">
+
+        <div class="place-order-header">
+            <button class="back-btn" @onclick="GoBack">← Back to cart</button>
+            <h1>Place Your Order</h1>
+            <p>Fill in your delivery details and we'll bring the water to you.</p>
+        </div>
+
+        @if (_orderPlaced)
+        {
+            <div class="success-card">
+                <div class="success-icon">✓</div>
+                <h2>Order Confirmed!</h2>
+                <p>Your order has been placed successfully. Payment is due on delivery.</p>
+                <button class="btn-primary" @onclick="GoToCatalog">Back to Catalog</button>
+            </div>
+        }
+        else
+        {
+            <div class="order-body">
+
+                <!-- Order Summary -->
+                <div class="order-summary-card">
+                    <h2>Order Summary</h2>
+                    @if (Components.Cart.CartService.Items.Count == 0)
+                    {
+                        <p class="empty-cart-msg">Your cart is empty. <a href="/catalog">Go back to catalog.</a></p>
+                    }
+                    else
+                    {
+                        <div class="summary-items">
+                            @foreach (var item in Components.Cart.CartService.Items)
+                            {
+                                <div class="summary-item">
+                                    <span class="summary-item-name">@item.Name</span>
+                                    <span class="summary-item-qty">x@item.Quantity</span>
+                                    <span class="summary-item-price">$@((item.Price * item.Quantity).ToString("0.00"))</span>
+                                </div>
+                            }
+                        </div>
+                        <div class="summary-total">
+                            <span>Total</span>
+                            <strong>$@Components.Cart.CartService.Total.ToString("0.00")</strong>
+                        </div>
+                        <div class="payment-notice">
+                            <span class="payment-badge">💵 Pay on delivery</span>
+                        </div>
+                    }
+                </div>
+
+                <!-- Delivery Address Form -->
+                <div class="address-card">
+                    <h2>Delivery Address</h2>
+
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Street</label>
+                            <input type="text" @bind="_street" placeholder="e.g. Main Street" class="form-input @(ShowError(_street) ? "input-error" : "")"/>
+                            @if (ShowError(_street))
+                            {
+                                <span class="field-error">Street is required</span>
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label>House Number</label>
+                            <input type="text" @bind="_houseNumber" placeholder="e.g. 42" class="form-input @(ShowError(_houseNumber) ? "input-error" : "")"/>
+                            @if (ShowError(_houseNumber))
+                            {
+                                <span class="field-error">House number is required</span>
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label>Apartment / Unit <span class="optional">(optional)</span></label>
+                            <input type="text" @bind="_aptNumber" placeholder="e.g. Apt 3B" class="form-input"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label>City</label>
+                            <input type="text" @bind="_city" placeholder="e.g. New York" class="form-input @(ShowError(_city) ? "input-error" : "")"/>
+                            @if (ShowError(_city))
+                            {
+                                <span class="field-error">City is required</span>
+                            }
+                        </div>
+
+                        <div class="form-group">
+                            <label>State</label>
+                            <input type="text" @bind="_state" placeholder="e.g. NY" class="form-input @(ShowError(_state) ? "input-error" : "")"/>
+                            @if (ShowError(_state))
+                            {
+                                <span class="field-error">State is required</span>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                @if (!string.IsNullOrEmpty(_errorMessage))
+                {
+                    <div class="error-banner">⚠ @_errorMessage</div>
+                }
+
+                <button class="btn-primary submit-btn" @onclick="SubmitOrder" disabled="@(_isSubmitting || Components.Cart.CartService.Items.Count == 0)">
+                    @if (_isSubmitting)
+                    {
+                        <span class="spinner"></span>
+                        <span>Placing order...</span>
+                    }
+                    else
+                    {
+                        <span>Confirm Order</span>
+                    }
+                </button>
+
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    private HttpClient _backendClient;
+    private Guid _customerId;
+    private List<AddressDto> _addressesDto = new();
+
+    // Form fields
+    private string _street = string.Empty;
+    private string _houseNumber = string.Empty;
+    private string _aptNumber = string.Empty;
+    private string _city = string.Empty;
+    private string _state = string.Empty;
+
+    // UI state
+    private bool _isSubmitting;
+    private bool _submitted;
+    private bool _orderPlaced;
+    private string _errorMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _backendClient = HttpClientFactory.CreateClient("backendClient");
+
+        var response = await _backendClient.GetAsync("/api/auth/google/profile");
+
+        if (!response.IsSuccessStatusCode)
+        {
+            Navigation.NavigateTo("/Unauthorize");
+            return;
+        }
+
+        var profile = await response.Content.ReadFromJsonAsync<ClaimsPrincipal>();
+
+        // TODO: replace with real authenticated user/customer id
+        var userId = Guid.NewGuid();
+        _customerId = userId;
+
+        var addressResponse = await _backendClient.GetAsync($"/api/waterDelivery/customerAddress/{userId}");
+        if (!addressResponse.IsSuccessStatusCode)
+        {
+            _addressesDto = new List<AddressDto>();
+            return;
+        }
+
+        var addressesResult =
+            await addressResponse.Content.ReadFromJsonAsync<GetCustomerAddressesResultDto>();
+
+        _addressesDto = addressesResult?.Addresses ?? new List<AddressDto>();
+    }
+
+    private bool ShowError(string value) => _submitted && string.IsNullOrWhiteSpace(value);
+
+    private void GoBack() => Navigation.NavigateTo("/catalog");
+
+    private void GoToCatalog()
+    {
+        CartService.Clear();
+        Navigation.NavigateTo("/catalog");
+    }
+
+    private async Task SubmitOrder()
+    {
+        _submitted = true;
+        _errorMessage = string.Empty;
+
+        if (string.IsNullOrWhiteSpace(_street) ||
+            string.IsNullOrWhiteSpace(_houseNumber) ||
+            string.IsNullOrWhiteSpace(_city) ||
+            string.IsNullOrWhiteSpace(_state))
+        {
+            return;
+        }
+
+        if (CartService.Items.Count == 0)
+        {
+            _errorMessage = "Your cart is empty.";
+            return;
+        }
+
+        _isSubmitting = true;
+
+        try
+        {
+            var request = new PlaceOrderRequest
+            {
+                CustomerId = _customerId,
+                Street = _street,
+                HouseNumber = _houseNumber,
+                AptNumber = _aptNumber,
+                City = _city,
+                State = _state,
+                //ToDO Add catalog items mapping to order item dto
+            };
+
+            var placeOrderUseCase = new PlaceOrderUseCase(_backendClient);
+            var result = await placeOrderUseCase.ExecuteAsync(request, CancellationToken.None);
+
+            _orderPlaced = true;
+            
+            //ToDo create a page to navigate that confirms placing the order Navigation.NavigateTo($"/order-confirmation/{result.OrderId}");
+        }
+        catch (InvalidOperationException ex)
+        {
+            _errorMessage = ex.Message;
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"An unexpected error occurred: {ex.Message}";
+        }
+        finally
+        {
+            _isSubmitting = false;
+        }
+    }
+}

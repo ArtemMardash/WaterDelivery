@@ -1,6 +1,6 @@
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
-using WaterDelivery.Backend.Features.Bills.Dtos;
+using WaterDelivery.Contracts.Bills.Dtos;
 
 namespace WaterDelivery.Backend.Features.Bills;
 

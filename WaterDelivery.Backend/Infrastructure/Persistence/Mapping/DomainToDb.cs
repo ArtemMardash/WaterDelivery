@@ -107,4 +107,13 @@ public static class DomainToDb
             Addresses = customerAddresses.Addresses.Select(a => a.ToDb()).ToList()
         };
     }
+
+    public static CartDb ToDb(this Cart cart)
+    {
+        return new CartDb
+        {
+            CustomerId = cart.CustomerId,
+            Items = cart.Items
+        };
+    }
 }

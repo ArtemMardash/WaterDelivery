@@ -1,3 +1,4 @@
+using System.Collections;
 using WaterDelivery.Backend.Core.Entities;
 
 namespace WaterDelivery.Backend.Features.Shared;
@@ -13,4 +14,6 @@ public interface IProductRepository
     public Task DeleteProductAsync(Guid id, CancellationToken cancellationToken);
 
     public Task<List<Product>> GetAllProductsAsync(CancellationToken cancellationToken);
+
+    public Task<List<Product>> GetProductsAsync(IEnumerable<Guid> ids, CancellationToken cancellationToken);
 }

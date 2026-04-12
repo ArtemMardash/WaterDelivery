@@ -1,11 +1,11 @@
 using FluentAssertions;
 using NSubstitute;
 using WaterDelivery.Backend.Core.Entities;
-using WaterDelivery.Backend.Core.Enums;
 using WaterDelivery.Backend.Core.Interfaces;
 using WaterDelivery.Backend.Features.Shared;
 using WaterDelivery.Backend.Features.Users;
-using WaterDelivery.Backend.Features.Users.Dtos;
+using WaterDelivery.Contracts.Enums;
+using WaterDelivery.Contracts.Users.Dtos;
 
 namespace WaterDelivery.Tests.UseCaseTests;
 

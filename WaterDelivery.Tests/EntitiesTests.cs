@@ -1,6 +1,6 @@
 using FluentAssertions;
 using WaterDelivery.Backend.Core.Entities;
-using WaterDelivery.Backend.Core.Enums;
+using WaterDelivery.Contracts.Enums;
 
 namespace WaterDelivery.Tests;
 

@@ -8,6 +8,14 @@
 
     <ItemGroup>
       <Folder Include="Addresses\" />
+      <Folder Include="Bills\" />
+      <Folder Include="Deliveries\" />
+      <Folder Include="GoogleAuth\" />
+      <Folder Include="Orders\" />
+      <Folder Include="Products\" />
+      <Folder Include="ProductUnits\" />
+      <Folder Include="S3\" />
+      <Folder Include="Users\" />
     </ItemGroup>
 
     <ItemGroup>
