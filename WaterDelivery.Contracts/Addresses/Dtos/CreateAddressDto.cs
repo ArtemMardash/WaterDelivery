@@ -1,10 +1,9 @@
 using Mediator;
 
-namespace WaterDelivery.Backend.Features.Addresses.Dtos;
+namespace WaterDelivery.Contracts.Addresses.Dtos;
 
-public class UpdateAddressDto: IRequest
+public class CreateAddressDto: IRequest<Guid>
 {
-    public Guid Id { get; set; }
 
     public string Street { get; set; }
 
@@ -15,6 +14,4 @@ public class UpdateAddressDto: IRequest
     public string City { get; set; }
 
     public string State { get; set; }
-    
-    public bool isDeleted { get; set; }
 }

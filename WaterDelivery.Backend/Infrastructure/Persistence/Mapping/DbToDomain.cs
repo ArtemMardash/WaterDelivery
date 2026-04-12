@@ -32,7 +32,7 @@ public static class DbToDomain
     {
         return new Product(productDb.Id, productDb.Name, productDb.Description,
             productDb.ProductOptions.Select(p => p.ToDomain()).ToList(), productDb.DefaultUnit.ToDomain(),
-            productDb.DefaultUnitPrice);
+            productDb.DefaultUnitPrice, productDb.ImageLinks);
     }
 
     public static ProductUnit ToDomain(this ProductUnitDb productUnitDb)
@@ -43,7 +43,7 @@ public static class DbToDomain
 
     public static User ToDomain(this UserDb userDb)
     {
-        return new User(userDb.Id, userDb.Name, (UserType)userDb.UserType, userDb.Email, userDb.PhoneNumber);
+        return new User(userDb.Uid, userDb.Name, (UserType)userDb.UserType, userDb.Email, userDb.PhoneNumber);
     }
 
     public static CustomerAddresses ToDomain(this CustomerAddressesDb customerAddressesDb)

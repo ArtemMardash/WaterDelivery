@@ -32,7 +32,8 @@ public class ProductRepository: IProductRepository
             .Set(p => p.Name, db.Name)
             .Set(p => p.ProductOptions, db.ProductOptions)
             .Set(p => p.Id, db.Id)
-            .Set(p => p.DefaultUnitPrice, db.DefaultUnitPrice);
+            .Set(p => p.DefaultUnitPrice, db.DefaultUnitPrice)
+            .Set(p => p.ImageLinks, db.ImageLinks);
         await _product.UpdateOneAsync(p => p.Id == product.Id, update, cancellationToken: cancellationToken);
     }
 
@@ -51,5 +52,18 @@ public class ProductRepository: IProductRepository
     public async Task DeleteProductAsync(Guid id, CancellationToken cancellationToken)
     {
         await _product.DeleteOneAsync(p => p.Id == id, cancellationToken: cancellationToken);
+    }
+
+    public async Task<List<Product>> GetAllProductsAsync(CancellationToken cancellationToken)
+    {
+        var filter = Builders<ProductDb>.Filter.Empty;
+        var products = await _product.Find(filter).ToListAsync(cancellationToken);
+
+        if (products == null)
+        {
+            throw new InvalidOperationException("There is no products at all");
+        }
+
+        return products.Select(p => p.ToDomain()).ToList();
     }
 }

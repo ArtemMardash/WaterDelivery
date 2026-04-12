@@ -18,4 +18,6 @@ public class ProductDto
     public ProductUnitDto DefaultUnit { get; set; }
 
     public decimal DefaultUnitPrice { get; set; }
+    
+    public List<string> ImageLinks { get; set; }
 }

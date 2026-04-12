@@ -3,9 +3,9 @@ using Mediator;
 using MongoDB.Driver;
 using WaterDelivery.Backend.Core.Entities;
 using WaterDelivery.Backend.Core.Interfaces;
-using WaterDelivery.Backend.Features.Addresses.Dtos;
 using WaterDelivery.Backend.Features.Shared;
 using WaterDelivery.Backend.Infrastructure.Persistence;
+using WaterDelivery.Contracts.Addresses.Dtos;
 
 namespace WaterDelivery.Tests.IntegrationTests;
 

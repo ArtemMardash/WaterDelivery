@@ -9,6 +9,7 @@ public static class OrderController
     public static void MapOrderEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("/api/waterDelivery/order")
+            .RequireAuthorization()
             .WithTags("order");
 
         group.MapPost("/", async ([FromBody]CreateOrderDto dto,[FromServices] IMediator mediator, CancellationToken cancellationToken) =>

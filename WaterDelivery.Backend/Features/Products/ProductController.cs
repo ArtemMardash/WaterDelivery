@@ -17,6 +17,7 @@ public static class ProductController
                 return result;
             })
             .WithName("CreateProduct")
+            .RequireAuthorization()
             .WithOpenApi();
 
         group.MapGet("/{id:guid}", async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
@@ -29,6 +30,7 @@ public static class ProductController
                 return result;
             })
             .WithName("GetProduct")
+            .RequireAuthorization()
             .WithOpenApi();
 
         group.MapPut("/", async ([FromBody] UpdateProductDto dto,[FromServices] IMediator mediator, CancellationToken cancellationToken) =>
@@ -36,6 +38,7 @@ public static class ProductController
                 await mediator.Send(dto, cancellationToken);
             })
             .WithName("UpdateProduct")
+            .RequireAuthorization()
             .WithOpenApi();
 
         group.MapDelete("/{id:guid}", async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
@@ -47,6 +50,17 @@ public static class ProductController
                 await mediator.Send(dto, cancellationToken);
             })
             .WithName("DeleteProduct")
+            .RequireAuthorization()
+            .WithOpenApi();
+
+        group.MapGet("/getAll", async ([FromServices] IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                var dto = new GetAllProductsDto();
+
+                var result = await mediator.Send(dto, cancellationToken);
+                return result;
+            })
+            .WithName("GetAllProducts")
             .WithOpenApi();
     }
 }

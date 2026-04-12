@@ -1,6 +1,6 @@
 using Mediator;
 
-namespace WaterDelivery.Backend.Features.Addresses.Dtos;
+namespace WaterDelivery.Contracts.Addresses.Dtos;
 
 public class GetAddressDto: IRequest<GetAddressResultDto>
 {

@@ -1,8 +1,8 @@
 using Mediator;
 using WaterDelivery.Backend.Core.Entities;
 using WaterDelivery.Backend.Core.Interfaces;
-using WaterDelivery.Backend.Features.CustomersAddresses.Dtos;
 using WaterDelivery.Backend.Features.Shared;
+using WaterDelivery.Contracts.CustomersAddresses.Dtos;
 
 namespace WaterDelivery.Backend.Features.CustomersAddresses;
 

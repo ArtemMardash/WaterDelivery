@@ -1,8 +1,8 @@
 using WaterDelivery.Backend.Core.Entities;
-using WaterDelivery.Backend.Features.Addresses.Dtos;
 using WaterDelivery.Backend.Features.Orders.Dtos;
 using WaterDelivery.Backend.Features.Products.Dtos;
 using WaterDelivery.Backend.Features.ProductUnits.Dtos;
+using WaterDelivery.Contracts.Addresses.Dtos;
 
 namespace WaterDelivery.Backend.Features;
 

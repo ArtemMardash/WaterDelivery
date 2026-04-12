@@ -25,9 +25,9 @@ public class CreateProductUseCase: IRequestHandler<CreateProductDto, Guid>
             request.ProductOptions.Select(pu=>pu.ToEntity()).ToList(), 
             request.DefaultUnit.ToEntity(),
             request.DefaultUnitPrice);
+        product.ImageLinks = request.ImageLinks;
         var result = await _productRepository.CreateProductAsync(product, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         return product.Id;
-
     }
 }

@@ -21,9 +21,11 @@ public class Product
     public ProductUnit DefaultUnit { get; set; }
 
     public decimal DefaultUnitPrice { get; set; }
-
+    
+    public List<string> ImageLinks { get; set; }
+    
     public Product(Guid id, string name, string description, List<ProductUnit> productOptions, ProductUnit defaultUnit,
-        decimal defaultUnitPrice)
+        decimal defaultUnitPrice, List<string> imageLinks)
     {
         Id = id;
         SetName(name);
@@ -33,6 +35,7 @@ public class Product
         DefaultUnitPrice = defaultUnitPrice <= 0
             ? throw new ArgumentException("Default price cannot be less or equal to 0", nameof(DefaultUnitPrice))
             : defaultUnitPrice;
+        ImageLinks = imageLinks;
     }
 
     public Product(string name, string description, List<ProductUnit> productOptions, ProductUnit defaultUnit,
@@ -46,6 +49,8 @@ public class Product
         DefaultUnitPrice = defaultUnitPrice <= 0
             ? throw new ArgumentException("Default price cannot be less or equal to 0", nameof(DefaultUnitPrice))
             : defaultUnitPrice;
+        ImageLinks = new List<string>();
+
     }
 
     private void SetName(string input)

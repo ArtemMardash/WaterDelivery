@@ -9,6 +9,7 @@ public static class BillController
     public static void MapBillEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("/api/waterDelivery/bill")
+            .RequireAuthorization()
             .WithTags("bill");
 
         group.MapPost("/",

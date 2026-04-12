@@ -1,10 +1,27 @@
+using Microsoft.AspNetCore.Identity;
+using WaterDelivery.Backend.Core.GoogleAuth;
+using WaterDelivery.Backend.Infrastructure.Persistence.DbEntities;
 using WaterDelivery.UI.Components;
+using WaterDelivery.UI.Components.Auth;
+using WaterDelivery.UI.Components.Cart;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.ConfigureApplicationCookie(opt =>
+{
+    opt.LoginPath = "/login";
+    opt.AccessDeniedPath = "/auth-error";
+    opt.ExpireTimeSpan = TimeSpan.FromDays(3);
+    opt.SlidingExpiration = true;
+});
+builder.Services.AddSingleton<CartService>();
+builder.Services.AddHttpClient("backendClient", c =>
+{
+    c.BaseAddress = new Uri("http://localhost:5017");
+});
 
 var app = builder.Build();
 

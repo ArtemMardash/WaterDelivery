@@ -10,7 +10,7 @@ public interface ICustomerAddressesRepository
 
     public Task<CustomerAddresses> GetCustomerAddressesByIdAsync(Guid id, CancellationToken cancellationToken);
 
-    public Task<List<Address>> GetAllCustomerAddresses(Guid customerId, CancellationToken cancellationToken);
+    public Task<List<CustomerAddresses>> GetAllCustomerAddresses(Guid customerId, CancellationToken cancellationToken);
 
     public Task DeleteCustomerAddressesAsync(Guid id, CancellationToken cancellationToken);
 }

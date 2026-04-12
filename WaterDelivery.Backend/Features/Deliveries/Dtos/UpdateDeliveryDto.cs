@@ -1,7 +1,7 @@
 using Mediator;
 using WaterDelivery.Backend.Core.Enums;
-using WaterDelivery.Backend.Features.Addresses.Dtos;
 using WaterDelivery.Backend.Features.Orders.Dtos;
+using WaterDelivery.Contracts.Addresses.Dtos;
 
 namespace WaterDelivery.Backend.Features.Deliveries.Dtos;
 

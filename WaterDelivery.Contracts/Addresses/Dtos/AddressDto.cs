@@ -1,6 +1,6 @@
-namespace WaterDelivery.Backend.Features.Addresses.Dtos;
+namespace WaterDelivery.Contracts.Addresses.Dtos;
 
-public class GetAddressResultDto
+public class AddressDto
 {
     public Guid Id { get; set; }
 
@@ -13,4 +13,6 @@ public class GetAddressResultDto
     public string City { get; set; }
 
     public string State { get; set; }
+    
+    public bool isDeleted { get; set; }
 }

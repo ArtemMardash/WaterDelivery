@@ -1,6 +1,4 @@
-using System.Net;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 using WaterDelivery.Backend.Core.Interfaces;
 using WaterDelivery.Backend.Core.S3;
 using WaterDelivery.Backend.Features.S3.Dtos;
@@ -27,6 +25,7 @@ public static class S3Controller
                     return fileName;
                 })
             .DisableAntiforgery()
+            .RequireAuthorization()
             .WithOpenApi();
 
         group.MapPost("/createBucket",
@@ -40,6 +39,7 @@ public static class S3Controller
                     await minioService.CreateBucketAsync(dto.BucketName, cancellationToken);
                 })
             .DisableAntiforgery()
+            .RequireAuthorization()
             .WithOpenApi();
 
         group.MapDelete("/removeBucket",
@@ -54,6 +54,7 @@ public static class S3Controller
                     await minioService.RemoveBucketAsync(dto.BucketName, cancellationToken);
                 })
             .DisableAntiforgery()
+            .RequireAuthorization()
             .WithOpenApi();
 
         group.MapGet("/getBuckets", async ([FromServices]IMinioService minioService, CancellationToken cancellationToken) =>
@@ -62,6 +63,7 @@ public static class S3Controller
                 return result;
             })
             .DisableAntiforgery()
+            .RequireAuthorization()
             .WithOpenApi();
 
         group.MapGet("/downloadFile/{bucketName}/{fileName}",
@@ -97,6 +99,7 @@ public static class S3Controller
                 return await minioService.ListFilesAsync(bucketName, cancellationToken);
             })
             .DisableAntiforgery()
+            .RequireAuthorization()
             .WithOpenApi();
 
         group.MapDelete("removeFile",
@@ -111,6 +114,7 @@ public static class S3Controller
                     await minioService.RemoveFileAsync(dto.BucketName, dto.FileName, cancellationToken);
                 })
             .DisableAntiforgery()
+            .RequireAuthorization()
             .WithOpenApi();
     }
 }

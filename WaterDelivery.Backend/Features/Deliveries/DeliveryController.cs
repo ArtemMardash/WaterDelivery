@@ -9,6 +9,7 @@ public static class DeliveryController
     public static void MapDeliveryEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("/api/waterDelivery/delivery")
+            .RequireAuthorization()
             .WithTags("delivery");
 
         group.MapPost("/", async ([FromBody]CreateDeliveryDto dto,[FromServices] IMediator mediator, CancellationToken cancellationToken) =>

@@ -1,0 +1,181 @@
+@page "/"
+@page "/catalog"
+@inject NavigationManager Navigation
+@inject CartService CartService
+@rendermode InteractiveServer
+@using WaterDelivery.UI.Components.Cart
+@implements IDisposable
+
+<PageTitle>Catalog</PageTitle>
+
+<div class="catalog-layout">
+    <div class="catalog-main">
+        <div class="catalog-header">
+            <div>
+                <h1>Catalog</h1>
+                <p>Browse available products.</p>
+            </div>
+
+            <div class="catalog-header-actions">
+                <button type="button" class="cart-toggle-btn" @onclick="ToggleCart">
+                    Cart (@CartService.Count)
+                </button>
+            </div>
+        </div>
+
+        @if (_products is null || _products.Count == 0)
+        {
+            <div class="empty-state">
+                <h3>No products found</h3>
+                <p>There are no products in the catalog yet.</p>
+            </div>
+        }
+        else
+        {
+            <div class="catalog-grid">
+                @foreach (var product in _products)
+                {
+                    <article class="product-card">
+                        <div class="product-image-wrapper">
+                            @if (!string.IsNullOrWhiteSpace(product.ImageUrl))
+                            {
+                                <img src="@product.ImageUrl" alt="@product.Name" class="product-image"/>
+                            }
+                            else
+                            {
+                                <div class="product-image-placeholder">
+                                    <span>No image</span>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="product-content">
+                            <h2 class="product-title">@product.Name</h2>
+                            <p class="product-description">@product.Description</p>
+
+                            <div class="product-footer">
+                                <span class="product-price">$@product.Price.ToString("0.00")</span>
+                                <button type="button" class="add-to-cart-btn" @onclick="() => AddToCart(product)">
+                                    Add to cart
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </div>
+
+    @if (_isCartOpen)
+    {
+        <aside class="cart-panel">
+            <div class="cart-panel-header">
+                <h2>Your Cart</h2>
+                <div class="cart-panel-header-actions">
+                    <button type="button" class="close-cart-btn" @onclick="CloseCart">×</button>
+                </div>
+            </div>
+
+            @if (CartService.Count == 0)
+            {
+                <div class="cart-empty">
+                    <p>Your cart is empty.</p>
+                </div>
+            }
+            else
+            {
+                <div class="cart-items">
+                    @foreach (var item in CartService.Items)
+                    {
+                        <div class="cart-item">
+                            <div class="cart-item-info">
+                                <h4>@item.Name</h4>
+                                <p>$@item.Price.ToString("0.00") x @item.Quantity</p>
+                            </div>
+
+                            <div class="cart-item-actions">
+                                <button type="button" class="qty-btn" @onclick="() => CartService.DecreaseQuantity(item.ProductId)">-</button>
+                                <span>@item.Quantity</span>
+                                <button type="button" class="qty-btn" @onclick="() => CartService.IncreaseQuantity(item.ProductId)">+</button>
+                                <button type="button" class="remove-btn" @onclick="() => CartService.RemoveFromCart(item.ProductId)">Remove</button>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="cart-summary">
+                    <div class="cart-total">
+                        <span>Total</span>
+                        <strong>$@CartService.Total.ToString("0.00")</strong>
+                    </div>
+
+                    <button type="button" class="place-order-btn" @onclick="PlaceOrder">
+                        Place order
+                    </button>
+                </div>
+            }
+        </aside>
+    }
+</div>
+
+@code {
+    private bool _isCartOpen;
+
+    //ToDo implement backend request GetAllProducts + get a fitst imageLink from the array;
+    private List<ProductCatalog> _products = new()
+    {
+        new ProductCatalog
+        {
+            Id = Guid.NewGuid(),
+            Name = "Spring Water 18L",
+            Description = "Large bottle of fresh spring water for home or office.",
+            Price = 12.99m,
+            ImageUrl = "images/water-1.jpg"
+        },
+        new ProductCatalog
+        {
+            Id = Guid.NewGuid(),
+            Name = "Sparkling Water Pack",
+            Description = "Pack of sparkling mineral water bottles.",
+            Price = 8.50m,
+            ImageUrl = "images/water-2.jpg"
+        },
+        new ProductCatalog
+        {
+            Id = Guid.NewGuid(),
+            Name = "Purified Water 5L",
+            Description = "Compact purified water bottle for daily use.",
+            Price = 4.25m,
+            ImageUrl = ""
+        }
+    };
+
+    protected override void OnInitialized()
+    {
+        CartService.OnChange += StateHasChanged;
+    }
+
+    public void Dispose()
+    {
+        CartService.OnChange -= StateHasChanged;
+    }
+
+    private void ToggleCart() => _isCartOpen = !_isCartOpen;
+    private void CloseCart() => _isCartOpen = false;
+
+    private void AddToCart(ProductCatalog product)
+    {
+        CartService.AddToCart(new CartItem
+        {
+            ProductId = product.Id,
+            Name = product.Name,
+            Price = product.Price,
+            Quantity = 1
+        });
+    }
+
+    private void PlaceOrder()
+    {
+        Navigation.NavigateTo("/login");
+    }
+}

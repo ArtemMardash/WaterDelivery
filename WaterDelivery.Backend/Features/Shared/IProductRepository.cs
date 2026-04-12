@@ -11,4 +11,6 @@ public interface IProductRepository
     public Task<Product> GetProductByIdAsync(Guid id, CancellationToken cancellationToken);
 
     public Task DeleteProductAsync(Guid id, CancellationToken cancellationToken);
+
+    public Task<List<Product>> GetAllProductsAsync(CancellationToken cancellationToken);
 }

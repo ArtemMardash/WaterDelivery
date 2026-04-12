@@ -2,8 +2,8 @@ using FluentAssertions;
 using NSubstitute;
 using WaterDelivery.Backend.Core.Interfaces;
 using WaterDelivery.Backend.Features.Addresses;
-using WaterDelivery.Backend.Features.Addresses.Dtos;
 using WaterDelivery.Backend.Features.Shared;
+using WaterDelivery.Contracts.Addresses.Dtos;
 using Address = WaterDelivery.Backend.Core.Entities.Address;
 
 namespace WaterDelivery.Tests.UseCaseTests;

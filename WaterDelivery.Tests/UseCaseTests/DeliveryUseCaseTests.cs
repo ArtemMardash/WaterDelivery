@@ -3,11 +3,11 @@ using NSubstitute;
 using WaterDelivery.Backend.Core.Entities;
 using WaterDelivery.Backend.Core.Enums;
 using WaterDelivery.Backend.Core.Interfaces;
-using WaterDelivery.Backend.Features.Addresses.Dtos;
 using WaterDelivery.Backend.Features.Deliveries;
 using WaterDelivery.Backend.Features.Deliveries.Dtos;
 using WaterDelivery.Backend.Features.Orders.Dtos;
 using WaterDelivery.Backend.Features.Shared;
+using WaterDelivery.Contracts.Addresses.Dtos;
 
 namespace WaterDelivery.Tests.UseCaseTests;
 

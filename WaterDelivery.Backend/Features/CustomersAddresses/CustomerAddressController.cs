@@ -1,6 +1,6 @@
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
-using WaterDelivery.Backend.Features.CustomersAddresses.Dtos;
+using WaterDelivery.Contracts.CustomersAddresses.Dtos;
 
 namespace WaterDelivery.Backend.Features.CustomersAddresses;
 
@@ -9,6 +9,7 @@ public static class CustomerAddressController
     public static void MapCustomerAddressEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("/api/waterDelivery/customerAddress")
+            .RequireAuthorization()
             .WithTags("customerAddress");
 
         group.MapPost("/", async ([FromBody]CreateCustomerAddressesDto dto,[FromServices] IMediator mediator, CancellationToken cancellationToken) =>
@@ -21,7 +22,7 @@ public static class CustomerAddressController
 
         group.MapGet("/{id:guid}", async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
             {
-                var dto = new GetCustomerAddressesDto { Id = id };
+                var dto = new GetCustomerAddressesDto { CustomerId = id };
                 var result = await mediator.Send(dto, cancellationToken);
                 return result;
             })

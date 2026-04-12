@@ -1,6 +1,5 @@
 using FluentAssertions;
 using MongoDB.Driver;
-using NSubstitute.ExceptionExtensions;
 using WaterDelivery.Backend.Core.Entities;
 using WaterDelivery.Backend.Core.Enums;
 using WaterDelivery.Backend.Features.Shared;

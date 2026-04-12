@@ -16,4 +16,6 @@ public class ProductDb
     public ProductUnitDb DefaultUnit { get; set; }
     
     public decimal DefaultUnitPrice { get; set; }
+    
+    public List<string> ImageLinks { get; set; }
 }

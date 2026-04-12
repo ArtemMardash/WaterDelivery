@@ -1,6 +1,6 @@
 using Mediator;
 using Microsoft.AspNetCore.Mvc;
-using WaterDelivery.Backend.Features.Addresses.Dtos;
+using WaterDelivery.Contracts.Addresses.Dtos;
 
 namespace WaterDelivery.Backend.Features.Addresses;
 
@@ -9,6 +9,7 @@ public static class AddressController
     public static void MapAddressEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("/api/waterDelivery/address")
+            .RequireAuthorization()
             .WithTags("address");
         
         group.MapPost("/", async ([FromBody]CreateAddressDto dto, [FromServices]IMediator mediator, CancellationToken cancellationToken) =>

@@ -1,6 +1,6 @@
 using Mediator;
 
-namespace WaterDelivery.Backend.Features.CustomersAddresses.Dtos;
+namespace WaterDelivery.Contracts.CustomersAddresses.Dtos;
 
 public class DeleteCustomerAddressesDto: IRequest
 {

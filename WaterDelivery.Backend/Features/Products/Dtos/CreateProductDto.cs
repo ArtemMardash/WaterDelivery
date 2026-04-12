@@ -17,4 +17,6 @@ public class CreateProductDto: IRequest<Guid>
     public ProductUnitDto DefaultUnit { get; set; }
 
     public decimal DefaultUnitPrice { get; set; }
+    
+    public List<string> ImageLinks { get; set; }
 }

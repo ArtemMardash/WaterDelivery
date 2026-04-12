@@ -1,11 +1,9 @@
-using WaterDelivery.Backend.Features.Addresses.Dtos;
+using WaterDelivery.Contracts.Addresses.Dtos;
 
-namespace WaterDelivery.Backend.Features.CustomersAddresses.Dtos;
+namespace WaterDelivery.Contracts.CustomersAddresses.Dtos;
 
 public class GetCustomerAddressesResultDto
 {
-    public Guid Id { get; set; }
-    
     public Guid CustomerId { get; set; }
 
     public List<AddressDto> Addresses { get; set; } = new List<AddressDto>();

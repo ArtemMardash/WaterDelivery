@@ -2,10 +2,10 @@ using FluentAssertions;
 using NSubstitute;
 using WaterDelivery.Backend.Core.Entities;
 using WaterDelivery.Backend.Core.Interfaces;
-using WaterDelivery.Backend.Features.Addresses.Dtos;
 using WaterDelivery.Backend.Features.CustomersAddresses;
-using WaterDelivery.Backend.Features.CustomersAddresses.Dtos;
 using WaterDelivery.Backend.Features.Shared;
+using WaterDelivery.Contracts.Addresses.Dtos;
+using WaterDelivery.Contracts.CustomersAddresses.Dtos;
 
 namespace WaterDelivery.Tests.UseCaseTests;
 
@@ -46,10 +46,9 @@ public class CustomersAddressesUseCaseTests
         var useCase = new GetCustomerAddressesUseCase(_customerAddressesRepository);
         var result = await useCase.Handle(new GetCustomerAddressesDto
         {
-            Id = Guid.NewGuid()
+            CustomerId = Guid.NewGuid()
         }, CancellationToken.None);
 
         result.CustomerId.Should().Be(addresses.CustomerId);
-        result.Id.Should().Be(addresses.Id);
     }
 }

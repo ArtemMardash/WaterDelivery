@@ -19,7 +19,7 @@ public class UserRepository : IUserRepository
     {
         var userDb = user.ToDb();
         await _users.InsertOneAsync(userDb, cancellationToken);
-        return userDb.Id;
+        return userDb.Uid;
     }
 
     public async Task UpdateUserAsync(User user, CancellationToken cancellationToken)
@@ -35,12 +35,12 @@ public class UserRepository : IUserRepository
             .Set(u => u.UserType, db.UserType)
             .Set(u => u.Email, db.Email)
             .Set(u => u.Name, db.Name);
-        await _users.ReplaceOneAsync(u => u.Id == user.Id, user.ToDb(), cancellationToken: cancellationToken);
+        await _users.ReplaceOneAsync(u => u.Uid == user.Id, user.ToDb(), cancellationToken: cancellationToken);
     }
 
     public async Task<User> GetUserByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        var userDb = await _users.Find(u => u.Id == id).FirstOrDefaultAsync(cancellationToken);
+        var userDb = await _users.Find(u => u.Uid == id).FirstOrDefaultAsync(cancellationToken);
         if (userDb == null)
         {
             throw new InvalidOperationException("There is no user with such Id");
@@ -65,12 +65,12 @@ public class UserRepository : IUserRepository
 
     public async Task DeleteUserAsync(Guid id, CancellationToken cancellationToken)
     {
-        await _users.DeleteOneAsync(u => u.Id == id, cancellationToken: cancellationToken);
+        await _users.DeleteOneAsync(u => u.Uid == id, cancellationToken: cancellationToken);
     }
 
     public async Task<bool> IsUserExists(User user, CancellationToken cancellationToken)
     {
-        if (await _users.Find(u => u.Id == user.Id).FirstOrDefaultAsync(cancellationToken) == null &&
+        if (await _users.Find(u => u.Uid == user.Id).FirstOrDefaultAsync(cancellationToken) == null &&
             await _users.Find(u => u.Email == user.Email).FirstOrDefaultAsync(cancellationToken) == null &&
             await _users.Find(u => u.PhoneNumber == user.PhoneNumber).FirstOrDefaultAsync(cancellationToken) == null)
         {

@@ -47,7 +47,7 @@ public class ProductRepositoryTests: BaseTest
 
 
         var productNew = new Product(resultId,"name1", "description1kjbbjblhlkhbj", new List<ProductUnit>(),
-            new ProductUnit(MeasurementUnits.Kilogram, 3), 2134);
+            new ProductUnit(MeasurementUnits.Kilogram, 3), 2134, new List<string>());
 
         await _productRepository.UpdateProductAsync(productNew, CancellationToken.None);
         var productDb = await _productRepository.GetProductByIdAsync(resultId, CancellationToken.None);

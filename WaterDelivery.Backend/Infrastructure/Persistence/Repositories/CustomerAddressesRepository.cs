@@ -48,16 +48,16 @@ public class CustomerAddressesRepository : ICustomerAddressesRepository
         return customerAddressDb.ToDomain();
     }
 
-    public async Task<List<Address>> GetAllCustomerAddresses(Guid customerId, CancellationToken cancellationToken)
+    public async Task<List<CustomerAddresses>> GetAllCustomerAddresses(Guid customerId, CancellationToken cancellationToken)
     {
         var customerAddresses =
-            await _customerAddresses.Find(c => c.CustomerId == customerId).FirstOrDefaultAsync(cancellationToken);
+            await _customerAddresses.Find(c => c.CustomerId == customerId).ToListAsync(cancellationToken);
         if (customerAddresses == null)
         {
             throw new InvalidOperationException($"Customer with Id {customerId} doesn't have any addresses");
         }
 
-        return customerAddresses.Addresses.Select(a => a.ToDomain()).ToList();
+        return customerAddresses.Select(c => c.ToDomain()).ToList();
     }
 
     public async Task DeleteCustomerAddressesAsync(Guid id, CancellationToken cancellationToken)

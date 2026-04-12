@@ -25,7 +25,8 @@ public class UpdateProductUseCase : IRequestHandler<UpdateProductDto>
             request.Description,
             request.ProductOptions.Select(pu => pu.ToEntity()).ToList(),
             request.DefaultUnit.ToEntity(), 
-            request.DefaultUnitPrice);
+            request.DefaultUnitPrice, 
+            request.ImageLinks);
         await _productRepository.UpdateProductAsync(productToUpdate, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
         

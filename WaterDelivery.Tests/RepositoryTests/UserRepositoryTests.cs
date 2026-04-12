@@ -45,13 +45,13 @@ public class UserRepositoryTests : BaseTest
 
         var newUser = new User(resultId, "12346", UserType.Customer, "artem.m4@gmail.com", "1241241245");
         await _userRepository.UpdateUserAsync(newUser, CancellationToken.None);
-        var userDb = await _user.Find(u => u.Id == resultId).FirstOrDefaultAsync(CancellationToken.None);
+        var userDb = await _user.Find(u => u.Uid == resultId).FirstOrDefaultAsync(CancellationToken.None);
 
         userDb.PhoneNumber.Should().Be(newUser.PhoneNumber);
         userDb.Name.Should().Be(newUser.Name);
         userDb.Email.Should().Be(newUser.Email);
         userDb.UserType.Should().Be((int)newUser.UserType);
-        userDb.Id.Should().Be(newUser.Id);
+        userDb.Uid.Should().Be(newUser.Id);
     }
 
     [Fact]
@@ -137,7 +137,7 @@ public class UserRepositoryTests : BaseTest
 
         await _userRepository.DeleteUserAsync(resultId, CancellationToken.None);
 
-        (await _user.Find(u => u.Id == resultId).FirstOrDefaultAsync(CancellationToken.None)).Should().BeNull();
+        (await _user.Find(u => u.Uid == resultId).FirstOrDefaultAsync(CancellationToken.None)).Should().BeNull();
     }
 
     [Theory]

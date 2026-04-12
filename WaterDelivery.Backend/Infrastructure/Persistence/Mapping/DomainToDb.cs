@@ -9,7 +9,7 @@ public static class DomainToDb
     {
         return new UserDb
         {
-            Id = user.Id,
+            Uid = user.Id,
             Name = user.Name,
             UserType = (int)user.UserType,
             Email = user.Email,

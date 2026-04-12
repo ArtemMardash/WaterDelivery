@@ -1,7 +1,7 @@
 using Mediator;
-using WaterDelivery.Backend.Features.Addresses.Dtos;
+using WaterDelivery.Contracts.Addresses.Dtos;
 
-namespace WaterDelivery.Backend.Features.CustomersAddresses.Dtos;
+namespace WaterDelivery.Contracts.CustomersAddresses.Dtos;
 
 public class UpdateCustomerAddressesDto: IRequest
 {

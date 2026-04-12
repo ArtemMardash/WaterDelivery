@@ -1,6 +1,8 @@
-namespace WaterDelivery.Backend.Features.Addresses.Dtos;
+using Mediator;
 
-public class AddressDto
+namespace WaterDelivery.Contracts.Addresses.Dtos;
+
+public class UpdateAddressDto: IRequest
 {
     public Guid Id { get; set; }
 

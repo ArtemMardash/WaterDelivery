@@ -1,0 +1,26 @@
+@page "/login"
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+
+<PageTitle>Login</PageTitle>
+
+<div class="login-container">
+    <div class="login-card">
+        <h1>Sign in</h1>
+        <p class="subtitle">Continue with Google to access the application.</p>
+
+        <button class="google-btn" @onclick="SignInWithGoogle">
+            <span class="google-icon">G</span>
+            <span>Sign in with Google</span>
+        </button>
+    </div>
+</div>
+
+@code {
+
+    private void SignInWithGoogle()
+    {
+        Navigation.NavigateTo("http://localhost:5017/api/auth/login", forceLoad: true);
+    }
+
+}

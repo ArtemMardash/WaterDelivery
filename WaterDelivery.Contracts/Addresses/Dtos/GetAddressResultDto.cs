@@ -1,9 +1,8 @@
-using Mediator;
+namespace WaterDelivery.Contracts.Addresses.Dtos;
 
-namespace WaterDelivery.Backend.Features.Addresses.Dtos;
-
-public class CreateAddressDto: IRequest<Guid>
+public class GetAddressResultDto
 {
+    public Guid Id { get; set; }
 
     public string Street { get; set; }
 

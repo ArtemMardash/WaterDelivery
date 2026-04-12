@@ -1,6 +1,6 @@
 using Mediator;
-using WaterDelivery.Backend.Features.CustomersAddresses.Dtos;
 using WaterDelivery.Backend.Features.Shared;
+using WaterDelivery.Contracts.CustomersAddresses.Dtos;
 
 namespace WaterDelivery.Backend.Features.CustomersAddresses;
 
@@ -15,10 +15,9 @@ public class GetCustomerAddressesUseCase: IRequestHandler<GetCustomerAddressesDt
     
     public async ValueTask<GetCustomerAddressesResultDto> Handle(GetCustomerAddressesDto request, CancellationToken cancellationToken)
     {
-        var result = await _customerAddressesRepository.GetCustomerAddressesByIdAsync(request.Id, cancellationToken);
+        var result = await _customerAddressesRepository.GetCustomerAddressesByIdAsync(request.CustomerId, cancellationToken);
         return new GetCustomerAddressesResultDto
         {
-            Id = result.Id,
             CustomerId = result.CustomerId,
             Addresses = result.Addresses.Select(s=>s.ToDto()).ToList()
         };

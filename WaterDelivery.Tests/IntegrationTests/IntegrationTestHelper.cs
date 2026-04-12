@@ -48,8 +48,8 @@ public class IntegrationTestHelper
             Console.WriteLine("Serializer registered");
         }
         services.AddScoped<IUnitOfWork, UnitOfWork>();
-        
-        builder.Services.AddMediator(opt=>opt.ServiceLifetime = ServiceLifetime.Scoped);
+
+        builder.Services.AddMediator(opt => opt.ServiceLifetime = ServiceLifetime.Scoped);
         
         var scope = builder.Build().Services.CreateScope();
 
@@ -76,6 +76,56 @@ public class IntegrationTestHelper
 
         var id = addressRepository.CreateAddressAsync(address, CancellationToken.None).GetAwaiter().GetResult();
         unitOfWork.SaveChanges();
+        return id;
+    }
+
+    public Guid CreateProduct(IProductRepository productRepository, IUnitOfWork unitOfWork)
+    {
+        var product = new Product(Guid.NewGuid(), "productNmae", "productDescription that esdcsdsd",
+            new List<ProductUnit>(), new ProductUnit(MeasurementUnits.Liter, 2), 12, new List<string>());
+
+        var id = productRepository.CreateProductAsync(product, CancellationToken.None).GetAwaiter().GetResult();
+        return id;
+    }
+
+    public Guid CreateBill(IBillRepository repository, IUnitOfWork unitOfWork)
+    {
+        var bill = new Bill(new Order(Guid.NewGuid(), new List<OrderItem>()), DateTime.UtcNow.AddDays(1), DateTime.Now.AddDays(7),
+            BillStatus.WaitForPayment);
+
+        var id = repository.CreateBillAsync(bill, CancellationToken.None).GetAwaiter().GetResult();
+        return id;
+    }
+
+    public Guid CreateCustomerAddresses(ICustomerAddressesRepository repository, IUnitOfWork unitOfWork)
+    {
+        var custAdd = new CustomerAddresses(Guid.NewGuid(), new List<Address>());
+        var id = repository.CreateCustomerAddressesAsync(custAdd, CancellationToken.None).GetAwaiter().GetResult();
+        return id;
+    }
+
+    public Guid CreateDelivery(IDeliveryRepository repository, IUnitOfWork unitOfWork)
+    {
+        var delivery = new Delivery(Guid.NewGuid(), new Order(Guid.NewGuid(), Guid.NewGuid(), new List<OrderItem>()),
+            new Address(Guid.NewGuid(), "street", "1509", "2b", "Brooklyn", "NY", false), DeliveryStatus.Assembly);
+
+        var id = repository.CreateDeliveryAsync(delivery, CancellationToken.None).GetAwaiter().GetResult();
+        return id;
+    }
+
+    public Guid CreateOrder(IOrderRepository repository, IUnitOfWork unitOfWork)
+    {
+        var order = new Order(Guid.NewGuid(), new List<OrderItem>());
+        var id = repository.CreateOrderAsync(order, CancellationToken.None).GetAwaiter().GetResult();
+
+        return id;
+    }
+
+    public Guid CreatePU(IProductUnitRepository repository, IUnitOfWork unitOfWork)
+    {
+        var pu = new ProductUnit(MeasurementUnits.Gallon, 2);
+        var id = repository.CreateProductUnitAsync(pu, CancellationToken.None).GetAwaiter().GetResult();
+
         return id;
     }
 
