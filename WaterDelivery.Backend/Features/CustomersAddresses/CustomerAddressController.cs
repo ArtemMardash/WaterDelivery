@@ -9,7 +9,7 @@ public static class CustomerAddressController
     public static void MapCustomerAddressEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("/api/waterDelivery/customerAddress")
-            .RequireAuthorization()
+            //.RequireAuthorization()
             .WithTags("customerAddress");
 
         group.MapPost("/", async ([FromBody]CreateCustomerAddressesDto dto,[FromServices] IMediator mediator, CancellationToken cancellationToken) =>

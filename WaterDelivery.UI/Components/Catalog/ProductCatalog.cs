@@ -1,3 +1,5 @@
+using WaterDelivery.Contracts.Products.Dtos;
+
 namespace WaterDelivery.UI.Components.Catalog;
 
 public class ProductCatalog
@@ -7,4 +9,5 @@ public class ProductCatalog
     public string Description { get; set; } 
     public decimal Price { get; set; }
     public string? ImageUrl { get; set; }
+    public ProductDto Source { get; set; } = null!;
 }

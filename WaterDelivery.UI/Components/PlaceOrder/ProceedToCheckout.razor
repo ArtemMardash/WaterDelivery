@@ -4,6 +4,7 @@
 @using WaterDelivery.Backend.Core.Entities
 @using WaterDelivery.Contracts.Addresses.Dtos
 @using WaterDelivery.Contracts.CustomersAddresses.Dtos
+@using WaterDelivery.Contracts.Orders.Dtos
 @using WaterDelivery.Contracts.Products.Dtos
 @using WaterDelivery.Contracts.ProductUnits.Dtos
 @using WaterDelivery.UI.Components.Cart
@@ -157,15 +158,15 @@
     {
         _backendClient = HttpClientFactory.CreateClient("backendClient");
 
-        var response = await _backendClient.GetAsync("/api/auth/google/profile");
+        //var response = await _backendClient.GetAsync("/api/auth/google/profile");
 
-        if (!response.IsSuccessStatusCode)
-        {
-            Navigation.NavigateTo("/Unauthorize");
-            return;
-        }
+        // if (!response.IsSuccessStatusCode)
+        // {
+        //     Navigation.NavigateTo("/Unauthorize");
+        //     return;
+        // }
 
-        var profile = await response.Content.ReadFromJsonAsync<ClaimsPrincipal>();
+        //var profile = await response.Content.ReadFromJsonAsync<ClaimsPrincipal>();
 
         // TODO: replace with real authenticated user/customer id
         var userId = Guid.NewGuid();
@@ -225,7 +226,12 @@
                 AptNumber = _aptNumber,
                 City = _city,
                 State = _state,
-                //ToDO Add catalog items mapping to order item dto
+                Items = CartService.Items.Select(item => new OrderItemDto
+                {
+                    Product = item.Product,
+                    Quantity = item.Quantity,
+                    ProductUnit = item.Product.DefaultUnit
+                }).ToList()
             };
 
             var placeOrderUseCase = new PlaceOrderUseCase(_backendClient);

@@ -35,14 +35,19 @@ public class PlaceOrderUseCase
         };
         await CreateCustomerAddressAsync(customerAddressesDto, cancellationToken);
 
-        var orderDto = new CreateOrderDto
+        var createOrderDto = new CreateOrderDto
         {
             CustomerId = request.CustomerId,
             Items = request.Items
         };
-        var orderId = await CreateOrderAsync(orderDto, cancellationToken);
+        var orderId = await CreateOrderAsync(createOrderDto, cancellationToken);
 
-        var orderForBill = new OrderDto();//ToDo get order by orderId for bill
+        var orderForBill = new OrderDto
+        {
+            Id = orderId,
+            CustomerId = request.CustomerId,
+            Items = request.Items
+        };
         var billDto = new CreateBillDto
         {
             Order = orderForBill,
@@ -59,7 +64,7 @@ public class PlaceOrderUseCase
             BillId = billId
         };
     }
-
+    
     private async Task<Guid> CreateAddressAsync(CreateAddressDto dto, CancellationToken cancellationToken)
     {
         var response = await _backendClient.PostAsJsonAsync(

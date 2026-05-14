@@ -136,14 +136,15 @@
             return;
 
         var result = await response.Content.ReadFromJsonAsync<GetAllProductsResultDto>();
-
+        
         _products = result?.Products.Select(p => new ProductCatalog
         {
             Id = p.Id,
             Name = p.Name,
             Description = p.Description,
             Price = p.DefaultUnitPrice,
-            ImageUrl = p.ImageLinks.FirstOrDefault()
+            ImageUrl = p.ImageLinks[0],
+            Source = p
         }).ToList() ?? new();
     }
 
@@ -162,12 +163,13 @@
             ProductId = product.Id,
             Name = product.Name,
             Price = product.Price,
-            Quantity = 1
+            Quantity = 1,
+            Product = product.Source
         });
     }
 
     private void PlaceOrder()
     {
-        Navigation.NavigateTo("/login");
+        Navigation.NavigateTo("/proceed-to-checkout");
     }
 }

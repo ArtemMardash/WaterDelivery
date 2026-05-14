@@ -38,7 +38,8 @@ public static class MappingExtensions
             Description = product.Description,
             ProductOptions = product.ProductOptions.Select(pu => pu.ToDto()).ToList(),
             DefaultUnit = product.DefaultUnit.ToDto(),
-            DefaultUnitPrice = product.DefaultUnitPrice
+            DefaultUnitPrice = product.DefaultUnitPrice,
+            ImageLinks = product.ImageLinks
         };
     }
 

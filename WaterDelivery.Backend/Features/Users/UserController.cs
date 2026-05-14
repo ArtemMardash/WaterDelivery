@@ -28,7 +28,7 @@ public static class UserController
                 return result;
             })
             .WithName("GetUser")
-            .RequireAuthorization()
+            //.RequireAuthorization()
             .WithOpenApi();
 
         group.MapPut("/",
@@ -46,7 +46,7 @@ public static class UserController
                 await mediator.Send(dto, cancellationToken);
             })
             .WithName("DeleteUser")
-            .RequireAuthorization()
+            //.RequireAuthorization()
             .WithOpenApi();
     }
 }

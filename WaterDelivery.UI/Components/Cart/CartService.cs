@@ -1,3 +1,5 @@
+using WaterDelivery.Contracts.Products.Dtos;
+
 namespace WaterDelivery.UI.Components.Cart;
 
 public class CartService
@@ -59,4 +61,5 @@ public class CartItem
     public string Name { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public int Quantity { get; set; }
+    public ProductDto Product { get; set; } = null!;
 }
