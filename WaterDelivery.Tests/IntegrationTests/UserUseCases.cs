@@ -11,7 +11,7 @@ using WaterDelivery.Contracts.Users.Dtos;
 
 namespace WaterDelivery.Tests.IntegrationTests;
 
-public class UserUseCases: IDisposable
+public class UserUseCases: IAsyncLifetime
 {
     private readonly IUserRepository _userRepository;
     private readonly WaterDeliveryContext _waterDeliveryContext;
@@ -110,10 +110,10 @@ public class UserUseCases: IDisposable
         result.PhoneNumber.Should().Be("9296996892");
         result.Id.Should().Be(_userId);
     }
+    
+    public Task InitializeAsync() => Task.CompletedTask;
 
-
-
-    public void Dispose()
+    public async Task DisposeAsync()
     {
         _dbService.DeleteDb(_waterDeliveryContext);
         _unitOfWork.Dispose();

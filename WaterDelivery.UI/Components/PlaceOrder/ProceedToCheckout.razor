@@ -39,14 +39,14 @@
                 <!-- Order Summary -->
                 <div class="order-summary-card">
                     <h2>Order Summary</h2>
-                    @if (Components.Cart.CartService.Items.Count == 0)
+                    @if (CartService.Items.Count == 0)
                     {
                         <p class="empty-cart-msg">Your cart is empty. <a href="/catalog">Go back to catalog.</a></p>
                     }
                     else
                     {
                         <div class="summary-items">
-                            @foreach (var item in Components.Cart.CartService.Items)
+                            @foreach (var item in CartService.Items)
                             {
                                 <div class="summary-item">
                                     <span class="summary-item-name">@item.Name</span>
@@ -57,7 +57,7 @@
                         </div>
                         <div class="summary-total">
                             <span>Total</span>
-                            <strong>$@Components.Cart.CartService.Total.ToString("0.00")</strong>
+                            <strong>$@CartService.Total.ToString("0.00")</strong>
                         </div>
                         <div class="payment-notice">
                             <span class="payment-badge">💵 Pay on delivery</span>
@@ -118,7 +118,7 @@
                     <div class="error-banner">⚠ @_errorMessage</div>
                 }
 
-                <button class="btn-primary submit-btn" @onclick="SubmitOrder" disabled="@(_isSubmitting || Components.Cart.CartService.Items.Count == 0)">
+                <button class="btn-primary submit-btn" @onclick="SubmitOrder" disabled="@(_isSubmitting || CartService.Items.Count == 0)">
                     @if (_isSubmitting)
                     {
                         <span class="spinner"></span>

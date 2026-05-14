@@ -5,6 +5,8 @@
 @rendermode InteractiveServer
 @using WaterDelivery.UI.Components.Cart
 @implements IDisposable
+@inject IHttpClientFactory HttpClientFactory
+@using WaterDelivery.Contracts.Products.Dtos
 
 <PageTitle>Catalog</PageTitle>
 
@@ -120,39 +122,29 @@
 
 @code {
     private bool _isCartOpen;
+    private List<ProductCatalog> _products = new();
+    private HttpClient _backendClient;
 
-    //ToDo implement backend request GetAllProducts + get a fitst imageLink from the array;
-    private List<ProductCatalog> _products = new()
+    protected override async Task OnInitializedAsync()
     {
-        new ProductCatalog
-        {
-            Id = Guid.NewGuid(),
-            Name = "Spring Water 18L",
-            Description = "Large bottle of fresh spring water for home or office.",
-            Price = 12.99m,
-            ImageUrl = "images/water-1.jpg"
-        },
-        new ProductCatalog
-        {
-            Id = Guid.NewGuid(),
-            Name = "Sparkling Water Pack",
-            Description = "Pack of sparkling mineral water bottles.",
-            Price = 8.50m,
-            ImageUrl = "images/water-2.jpg"
-        },
-        new ProductCatalog
-        {
-            Id = Guid.NewGuid(),
-            Name = "Purified Water 5L",
-            Description = "Compact purified water bottle for daily use.",
-            Price = 4.25m,
-            ImageUrl = ""
-        }
-    };
-
-    protected override void OnInitialized()
-    {
+        _backendClient = HttpClientFactory.CreateClient("backendClient");
         CartService.OnChange += StateHasChanged;
+
+        var response = await _backendClient.GetAsync("/api/waterDelivery/product/getAll");
+
+        if (!response.IsSuccessStatusCode)
+            return;
+
+        var result = await response.Content.ReadFromJsonAsync<GetAllProductsResultDto>();
+
+        _products = result?.Products.Select(p => new ProductCatalog
+        {
+            Id = p.Id,
+            Name = p.Name,
+            Description = p.Description,
+            Price = p.DefaultUnitPrice,
+            ImageUrl = p.ImageLinks.FirstOrDefault()
+        }).ToList() ?? new();
     }
 
     public void Dispose()

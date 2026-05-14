@@ -34,7 +34,7 @@ public class Bill
 
     public void SetCreationDate(DateTime creation)
     {
-        if (creation < DateTime.Now)
+        if (creation < DateTime.Now.AddSeconds(-10))
         {
             throw new ArgumentException($"Creation date can not be less then {DateTime.Now}");
         }
@@ -62,6 +62,8 @@ public class Bill
         switch (Status)
         {
             case BillStatus.Unknown:
+                if (newStatus == BillStatus.Unknown)
+                    throw new InvalidOperationException("Bill status cannot be set to Unknown");
                 Status = newStatus;
                 break;
             case BillStatus.WaitForPayment when newStatus is BillStatus.Paid:

@@ -1,4 +1,3 @@
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace WaterDelivery.Backend.Core.Entities;
 //ToDo think how to use ProductUnit entity 

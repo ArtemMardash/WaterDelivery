@@ -12,7 +12,7 @@ using WaterDelivery.Contracts.Orders.Dtos;
 
 namespace WaterDelivery.Tests.IntegrationTests;
 
-public class DeliveryUseCases: IDisposable
+public class DeliveryUseCases: IAsyncLifetime
 {
     private readonly IDeliveryRepository _deliveryRepository;
     private readonly WaterDeliveryContext _waterDeliveryContext;
@@ -156,8 +156,9 @@ public class DeliveryUseCases: IDisposable
         result.Address.State.Should().Be("NY");
         result.Status.Should().Be(DeliveryStatus.Assembly);
     }
+    public Task InitializeAsync() => Task.CompletedTask;
 
-    public void Dispose()
+    public async Task DisposeAsync()
     {
         _dbService.DeleteDb(_waterDeliveryContext);
         _unitOfWork.Dispose();

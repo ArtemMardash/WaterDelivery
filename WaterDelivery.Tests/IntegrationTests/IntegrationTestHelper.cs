@@ -40,6 +40,7 @@ public class IntegrationTestHelper
         services.AddScoped<IDeliveryRepository, DeliveryRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<IProductUnitRepository, ProductUnitRepository>();
+        services.AddScoped<ICartRepository, CartRepository>();
 
         services.AddIdentityMongoDbProvider<UserDb>(opt =>
         {
@@ -76,7 +77,15 @@ public class IntegrationTestHelper
         unitOfWork.SaveChanges();   
         return id;
     }
-
+    
+    public Guid CreateCart(ICartRepository repository, IUnitOfWork unitOfWork)
+    {
+        var customerId = Guid.NewGuid();
+        var cart = new Cart(customerId, new Dictionary<Guid, int>());
+        repository.CreateCartAsync(cart, CancellationToken.None).GetAwaiter().GetResult();
+        return customerId;
+    }
+    
     public Guid CreateAddress(IAddressRepository addressRepository, IUnitOfWork unitOfWork)
     {
         var address = new Address("Kings Hwy", "10", "5B", "Brooklyn", "NY");

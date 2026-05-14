@@ -31,7 +31,10 @@ public class CartRepository: ICartRepository
     public async Task<Cart> GetCartAsync(Guid customerId, CancellationToken cancellationToken)
     {
         var cartDb = await _cart.Find(c => c.CustomerId == customerId).FirstOrDefaultAsync(cancellationToken);
-
+        if (cartDb == null)
+        {
+            throw new InvalidOperationException("There is no cart with such ID");
+        }
         return cartDb.ToDomain();
     }
     

@@ -11,7 +11,7 @@ using WaterDelivery.Contracts.Orders.Dtos;
 
 namespace WaterDelivery.Tests.IntegrationTests;
 
-public class BillUseCases: IDisposable
+public class BillUseCases: IAsyncLifetime
 {
     private readonly IBillRepository _billRepository;
     private readonly WaterDeliveryContext _waterDeliveryContext;
@@ -120,8 +120,11 @@ public class BillUseCases: IDisposable
         result.Status.Should().Be(BillStatus.WaitForPayment);
     }
 
-    public void Dispose()
+    public Task InitializeAsync() => Task.CompletedTask;
+
+    public async Task DisposeAsync()
     {
         _dbService.DeleteDb(_waterDeliveryContext);
+        _unitOfWork.Dispose();
     }
 }

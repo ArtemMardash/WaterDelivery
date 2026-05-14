@@ -11,7 +11,7 @@ using WaterDelivery.Contracts.ProductUnits.Dtos;
 
 namespace WaterDelivery.Tests.IntegrationTests;
 
-public class ProductUseCases: IDisposable
+public class ProductUseCases: IAsyncLifetime
 {
     private readonly IProductRepository _productRepository;
     private readonly WaterDeliveryContext _waterDeliveryContext;
@@ -124,8 +124,9 @@ public class ProductUseCases: IDisposable
         result.DefaultUnit.QuantityPerUnit.Should().Be(2);
         result.DefaultUnitPrice.Should().Be(12);
     }
+    public Task InitializeAsync() => Task.CompletedTask;
 
-    public void Dispose()
+    public async Task DisposeAsync()
     {
         _dbService.DeleteDb(_waterDeliveryContext);
         _unitOfWork.Dispose();

@@ -46,7 +46,8 @@ public static class DomainToDb
             Description = product.Description,
             ProductOptions = product.ProductOptions.Select(p => p.ToDb()).ToList(),
             DefaultUnit = product.DefaultUnit.ToDb(),
-            DefaultUnitPrice = product.DefaultUnitPrice
+            DefaultUnitPrice = product.DefaultUnitPrice,
+            ImageLinks = product.ImageLinks
         };
     }
 

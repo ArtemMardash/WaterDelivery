@@ -66,7 +66,7 @@ public class Address
 
     public void SetAptNumber(string input)
     {
-        if (input.Length > APTNUMBER_MAX_LENGTH)
+        if (input != null && input.Length > APTNUMBER_MAX_LENGTH)
         {
             throw new ArgumentException("Invalid Apt number", nameof(AptNumber));
         }

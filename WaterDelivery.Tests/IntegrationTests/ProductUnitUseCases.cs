@@ -10,7 +10,7 @@ using WaterDelivery.Contracts.ProductUnits.Dtos;
 
 namespace WaterDelivery.Tests.IntegrationTests;
 
-public class ProductUnitUseCases
+public class ProductUnitUseCases: IAsyncLifetime
 {
     private readonly IProductUnitRepository _productUnitRepository;
     private readonly WaterDeliveryContext _waterDeliveryContext;
@@ -92,8 +92,9 @@ public class ProductUnitUseCases
         result.Name.Should().Be(MeasurementUnits.Gallon);
         result.QuantityPerUnit.Should().Be(2);
     }
+    public Task InitializeAsync() => Task.CompletedTask;
 
-    public void Dispose()
+    public async Task DisposeAsync()
     {
         _dbService.DeleteDb(_waterDeliveryContext);
         _unitOfWork.Dispose();
