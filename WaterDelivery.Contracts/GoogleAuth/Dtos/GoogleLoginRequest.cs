@@ -21,6 +21,7 @@ public class GoogleLoginRequest : IRequest<GoogleLoginResult>
 
 public class GoogleLoginResult
 {
+    public  Guid UserId { get; set; }
     /// <summary>
     /// AccessToken
     /// </summary>

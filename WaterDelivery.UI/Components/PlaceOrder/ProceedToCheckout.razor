@@ -7,11 +7,13 @@
 @using WaterDelivery.Contracts.Orders.Dtos
 @using WaterDelivery.Contracts.Products.Dtos
 @using WaterDelivery.Contracts.ProductUnits.Dtos
+@using WaterDelivery.UI.Components.Auth
 @using WaterDelivery.UI.Components.Cart
 @inject NavigationManager Navigation
 @inject CartService CartService
 @inject IHttpClientFactory HttpClientFactory
 @rendermode InteractiveServer
+@inject UserSession Session
 
 <PageTitle>Secure Checkout</PageTitle>
 
@@ -158,18 +160,13 @@
     {
         _backendClient = HttpClientFactory.CreateClient("backendClient");
 
-        //var response = await _backendClient.GetAsync("/api/auth/google/profile");
-
-        // if (!response.IsSuccessStatusCode)
-        // {
-        //     Navigation.NavigateTo("/Unauthorize");
-        //     return;
-        // }
-
-        //var profile = await response.Content.ReadFromJsonAsync<ClaimsPrincipal>();
-
-        // TODO: replace with real authenticated user/customer id
-        var userId = Guid.NewGuid();
+        if (!Session.IsAuthenticated)
+        {
+            Navigation.NavigateTo("/login");
+            return;
+        }
+        
+        var userId = Session.UserId!.Value;
         _customerId = userId;
 
         var addressResponse = await _backendClient.GetAsync($"/api/waterDelivery/customerAddress/{userId}");

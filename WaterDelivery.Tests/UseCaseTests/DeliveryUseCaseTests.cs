@@ -17,9 +17,13 @@ public class DeliveryUseCaseTests
 
     private readonly IUnitOfWork _unitOfWork;
     
+    private readonly IOutboxRepository _outboxRepository;
+
+
     public DeliveryUseCaseTests()
     {
         _deliveryRepository = Substitute.For<IDeliveryRepository>();
+        _outboxRepository = Substitute.For<IOutboxRepository>();
         _unitOfWork = Substitute.For<IUnitOfWork>();
         _unitOfWork.SaveChangesAsync(Arg.Any<CancellationToken>()).Returns(Task.CompletedTask);
     }
@@ -49,7 +53,7 @@ public class DeliveryUseCaseTests
             Status = DeliveryStatus.Assembly
         };
 
-        var useCase = new CreateDeliveryUseCase(_unitOfWork, _deliveryRepository);
+        var useCase = new CreateDeliveryUseCase(_unitOfWork, _deliveryRepository, _outboxRepository);
 
         var result =await useCase.Handle(dto, CancellationToken.None);
 

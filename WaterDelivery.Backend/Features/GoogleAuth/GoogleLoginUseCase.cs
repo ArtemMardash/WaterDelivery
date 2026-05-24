@@ -52,6 +52,7 @@ public class GoogleLoginUseCase : IRequestHandler<GoogleLoginRequest, GoogleLogi
         }
         return new GoogleLoginResult
         {
+            UserId = user.Uid,
             AccessToken = request.AccessToken,
             RefreshToken = request.RefreshToken
         };

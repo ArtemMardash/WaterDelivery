@@ -36,16 +36,13 @@ public static class GoogleLoginController
                 try
                 {
                     var tokens = await mediator.Send(request, cancellationToken);
-                        
-                    return Results.Redirect("http://localhost:5167/proceed-to-checkout");
+                    return Results.Redirect($"http://localhost:5167/auth/complete?uid={tokens.UserId}"); 
                 }
                 catch (Exception Ex)
                 {
                     Console.WriteLine(Ex.Message);
                     return Results.Redirect("http://localhost:5167/Unauthorize");
                 }
-               
-
             })
             .WithName("GoogleCallBack")
             .WithOpenApi();

@@ -17,7 +17,7 @@ builder.Services.ConfigureApplicationCookie(opt =>
     opt.ExpireTimeSpan = TimeSpan.FromDays(3);
     opt.SlidingExpiration = true;
 });
-builder.Services.AddSingleton<CartService>();
+builder.Services.AddScoped<CartService>();
 builder.Services.AddHttpClient("backendClient", c =>
 {
     c.BaseAddress = new Uri("http://localhost:5017");

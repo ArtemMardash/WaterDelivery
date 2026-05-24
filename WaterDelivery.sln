@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaterDelivery.Tests", "Wate
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaterDelivery.Contracts", "WaterDelivery.Contracts\WaterDelivery.Contracts.csproj", "{154420AA-7B17-44C9-B588-D878C706BD79}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WaterDelivery.BackgroundJobs", "WaterDelivery.BackgroundJobs\WaterDelivery.BackgroundJobs.csproj", "{9DA02E46-C2F6-4DA0-A984-F8ECD699BC07}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{154420AA-7B17-44C9-B588-D878C706BD79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{154420AA-7B17-44C9-B588-D878C706BD79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{154420AA-7B17-44C9-B588-D878C706BD79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DA02E46-C2F6-4DA0-A984-F8ECD699BC07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DA02E46-C2F6-4DA0-A984-F8ECD699BC07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DA02E46-C2F6-4DA0-A984-F8ECD699BC07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DA02E46-C2F6-4DA0-A984-F8ECD699BC07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection

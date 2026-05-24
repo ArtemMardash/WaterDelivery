@@ -7,6 +7,8 @@
 @implements IDisposable
 @inject IHttpClientFactory HttpClientFactory
 @using WaterDelivery.Contracts.Products.Dtos
+@using WaterDelivery.UI.Components.Auth
+@inject UserSession Session
 
 <PageTitle>Catalog</PageTitle>
 
@@ -136,7 +138,7 @@
             return;
 
         var result = await response.Content.ReadFromJsonAsync<GetAllProductsResultDto>();
-        
+
         _products = result?.Products.Select(p => new ProductCatalog
         {
             Id = p.Id,
@@ -170,6 +172,7 @@
 
     private void PlaceOrder()
     {
-        Navigation.NavigateTo("/proceed-to-checkout");
+        Navigation.NavigateTo(Session.IsAuthenticated ? "/proceed-to-checkout" : "/login");
     }
+
 }
