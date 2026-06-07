@@ -1,4 +1,3 @@
-using System.Collections;
 using WaterDelivery.Backend.Core.Entities;
 
 namespace WaterDelivery.Backend.Features.Shared;

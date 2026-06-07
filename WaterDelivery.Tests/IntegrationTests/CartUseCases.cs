@@ -1,10 +1,8 @@
 using FluentAssertions;
 using Mediator;
-using MongoDB.Driver;
 using WaterDelivery.Backend.Core.Interfaces;
 using WaterDelivery.Backend.Features.Shared;
 using WaterDelivery.Backend.Infrastructure.Persistence;
-using WaterDelivery.Backend.Infrastructure.Persistence.DbEntities;
 using WaterDelivery.Contracts.Carts.Dtos;
  
 namespace WaterDelivery.Tests.IntegrationTests;
