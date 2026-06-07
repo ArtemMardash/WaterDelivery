@@ -32,6 +32,11 @@ public class Delivery
         SetStatus(status);
     }
 
+    protected Delivery()
+    {
+        
+    }
+
     public void SetStatus(DeliveryStatus newStatus)
     {
         switch (Status)

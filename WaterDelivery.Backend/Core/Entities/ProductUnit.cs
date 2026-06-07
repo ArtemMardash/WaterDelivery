@@ -27,4 +27,9 @@ public class ProductUnit
             ? throw new ArgumentException("Quantity per unit cannot be less then 0", nameof(QuantityPerUnit))
             : quantityPerUnit;
     }
+
+    protected ProductUnit()
+    {
+        
+    }
 }

@@ -1,24 +1,13 @@
 @page "/auth/complete"
 @inject NavigationManager Navigation
-@inject UserSession Session
-@inject IHttpClientFactory HttpClientFactory
 
 <p>Signing you in…</p>
 
 @code {
-    [SupplyParameterFromQuery(Name = "uid")]
-    public string? Uid { get; set; }
-
+    // Sign-in is now completed by the UI OAuth callback (/auth/google-callback), which sets the
+    // cookie directly. This page only remains so any older bookmarked link still lands somewhere sane.
     protected override void OnInitialized()
     {
-        if (Guid.TryParse(Uid, out var userId))
-        {
-            Session.SignIn(userId);
-            Navigation.NavigateTo("/proceed-to-checkout");
-        }
-        else
-        {
-            Navigation.NavigateTo("/Unauthorize");
-        }
+        Navigation.NavigateTo("/proceed-to-checkout");
     }
 }

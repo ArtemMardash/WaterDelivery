@@ -1,8 +1,4 @@
-using Microsoft.AspNetCore.Identity;
-using WaterDelivery.Backend.Core.GoogleAuth;
-using WaterDelivery.Backend.Infrastructure.Persistence.DbEntities;
 using WaterDelivery.UI.Components;
-using WaterDelivery.UI.Components.Auth;
 using WaterDelivery.UI.Components.Cart;
 
 var builder = WebApplication.CreateBuilder(args);

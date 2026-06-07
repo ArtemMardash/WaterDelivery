@@ -1,65 +1,37 @@
-using System.Security.Claims;
 using Mediator;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Mvc;
 using WaterDelivery.Contracts.GoogleAuth.Dtos;
 
 namespace WaterDelivery.Backend.Features.GoogleAuth;
 
 public static class GoogleLoginController
 {
+    /// <summary>
+    /// The Google OAuth handshake now lives entirely in the UI project (it owns the cookie and
+    /// therefore the session that checkout reads). The backend no longer performs the OAuth
+    /// challenge/callback; it just exposes a plain endpoint that upserts the user coming from a
+    /// Google profile and hands back the internal user id.
+    /// </summary>
     public static void MapAuthEndpoints(this WebApplication app)
     {
-            var group = app.MapGroup("/api/auth")
-                .WithTags("Google");
+        var group = app.MapGroup("/api/auth")
+            .WithTags("Google");
 
-        group.MapGet("/signin", async (HttpContext context, IMediator mediator, CancellationToken cancellationToken) =>
-            {
-                var result = await context.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
-                if (!result.Succeeded) return Results.Unauthorized();
-                var principal = result.Principal;
-                var accessToken = result.Properties.Items[".Token.access_token"];
-                _ =
-                    result.Properties.Items.TryGetValue(".Token.refresh_token", out var refreshToken);
-                _ = DateTime.TryParse(result.Properties.Items[".Token.expires_at"], out var tokenExpiry);
-
-                var request = new GoogleLoginRequest
+        group.MapPost("/google-user",
+                async ([FromBody] GoogleLoginRequest request, [FromServices] IMediator mediator,
+                    CancellationToken cancellationToken) =>
                 {
-                    GoogleId = principal.FindFirstValue(ClaimTypes.NameIdentifier),
-                    Email = principal.FindFirstValue(ClaimTypes.Email),
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken,
-                    Expiry = tokenExpiry,
-                    FirstName = principal.FindFirstValue(ClaimTypes.Name),
-                    LastName = principal.FindFirstValue(ClaimTypes.Surname)
-                };
-                try
-                {
-                    var tokens = await mediator.Send(request, cancellationToken);
-                    return Results.Redirect($"http://localhost:5167/auth/complete?uid={tokens.UserId}"); 
-                }
-                catch (Exception Ex)
-                {
-                    Console.WriteLine(Ex.Message);
-                    return Results.Redirect("http://localhost:5167/Unauthorize");
-                }
-            })
-            .WithName("GoogleCallBack")
-            .WithOpenApi();
-
-        group.MapGet("/login",
-                async (HttpContext context) =>
-                {
-                    var props = new AuthenticationProperties
+                    try
                     {
-                        RedirectUri = "http://localhost:5017/api/auth/signin"
-                    };
-                    await context.ChallengeAsync(GoogleDefaults.AuthenticationScheme, props);
+                        var result = await mediator.Send(request, cancellationToken);
+                        return Results.Ok(result);
+                    }
+                    catch (Exception ex)
+                    {
+                        return Results.BadRequest(ex.Message);
+                    }
                 })
-            .WithName("GoogleLogin")    
+            .WithName("UpsertGoogleUser")
             .WithOpenApi();
-
-        group.MapGet("/google/profile", (ClaimsPrincipal user) => { return user; })
-            .RequireAuthorization();
     }
 }

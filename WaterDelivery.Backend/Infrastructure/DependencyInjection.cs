@@ -1,5 +1,4 @@
 using AspNetCore.Identity.Mongo;
-using WaterDelivery.Backend.Core.GoogleAuth;
 using WaterDelivery.Backend.Core.Interfaces;
 using WaterDelivery.Backend.Features.Shared;
 using WaterDelivery.Backend.Infrastructure.Persistence;
@@ -41,27 +40,9 @@ public static class DependencyInjection
 
     public static void RegisterAuth(this IServiceCollection services, IConfiguration config)
     {
-        var externalAuthSettings = config.GetSection(nameof(ExternalAuthSettings)) ??
-                                   throw new InvalidOperationException("No external auth section");
-        services.ConfigureApplicationCookie(opt =>
-        {
-            opt.LoginPath = "/login";
-            opt.AccessDeniedPath = "/auth-error";
-            opt.ExpireTimeSpan = TimeSpan.FromDays(3);
-            opt.SlidingExpiration = true;
-        });
-        services.AddAuthentication().AddGoogle(opt =>
-        {
-            opt.ClientId = externalAuthSettings["Google:client_id"];
-            opt.ClientSecret = externalAuthSettings["Google:client_secret"];
-            opt.CallbackPath = "/signin-google";
-
-            opt.AccessType = "offline";
-            opt.SaveTokens = true;
-
-            opt.Scope.Add("profile");
-            opt.Scope.Add("email");
-        });
-
+        // The Google OAuth handshake now lives in the UI project (see WaterDelivery.UI/Program.cs).
+        // The backend intentionally does not register Google authentication or the application cookie
+        // anymore: it only upserts users via the /api/auth/google-user endpoint. Kept as a no-op so
+        // existing call sites in Program.cs don't need to change.
     }
 }

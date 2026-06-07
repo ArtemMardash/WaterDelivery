@@ -15,11 +15,19 @@ public class GetCustomerAddressesUseCase: IRequestHandler<GetCustomerAddressesDt
     
     public async ValueTask<GetCustomerAddressesResultDto> Handle(GetCustomerAddressesDto request, CancellationToken cancellationToken)
     {
-        var result = await _customerAddressesRepository.GetCustomerAddressesByIdAsync(request.CustomerId, cancellationToken);
+        var records = await _customerAddressesRepository.GetAllCustomerAddresses(request.CustomerId, cancellationToken);
+
+        // A customer may have no address book yet (first-time checkout) -> return an empty list rather than throwing.
+        var addresses = records
+            .SelectMany(r => r.Addresses)
+            .Where(a => !a.IsDeleted)
+            .Select(a => a.ToDto())
+            .ToList();
+
         return new GetCustomerAddressesResultDto
         {
-            CustomerId = result.CustomerId,
-            Addresses = result.Addresses.Select(s=>s.ToDto()).ToList()
+            CustomerId = request.CustomerId,
+            Addresses = addresses
         };
     }
 }

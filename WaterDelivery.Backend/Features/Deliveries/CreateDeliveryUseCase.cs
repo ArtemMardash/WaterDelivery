@@ -1,11 +1,9 @@
 using Mediator;
-using MongoDB.Bson.IO;
 using WaterDelivery.Backend.Core.Entities;
 using WaterDelivery.Backend.Core.Interfaces;
 using WaterDelivery.Backend.Features.Shared;
 using WaterDelivery.Backend.Infrastructure.Persistence.DbEntities.TransactionOutbox;
 using WaterDelivery.Contracts.Deliveries.Dtos;
-using JsonConvert = Newtonsoft.Json.JsonConvert;
 
 namespace WaterDelivery.Backend.Features.Deliveries;
 
@@ -31,7 +29,7 @@ public class CreateDeliveryUseCase: IRequestHandler<CreateDeliveryDto, Guid>
         {
             Id = Guid.NewGuid(),
             Status = OutboxStatus.Pending,
-            PayLoad = JsonConvert.SerializeObject(delivery),
+            PayLoad = delivery.Id.ToString(),
             UpdatedAt = DateTime.UtcNow,
             CompletedAt = null
         };

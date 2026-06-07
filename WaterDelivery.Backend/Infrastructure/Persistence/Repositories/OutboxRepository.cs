@@ -1,4 +1,3 @@
-using Minio.DataModel.Notification;
 using MongoDB.Driver;
 using WaterDelivery.Backend.Features.Shared;
 using WaterDelivery.Backend.Infrastructure.Persistence.DbEntities.TransactionOutbox;
@@ -27,5 +26,15 @@ public class OutboxRepository: IOutboxRepository
         await _outbox.InsertOneAsync(outbox, cancellationToken: cancellationToken);
 
         return outbox.Id;
+    }
+    
+    public async Task MarkProcessedAsync(Outbox outbox, CancellationToken cancellationToken)
+    {
+        var update = Builders<Outbox>.Update
+            .Set(o => o.Status, outbox.Status)
+            .Set(o => o.UpdatedAt, outbox.UpdatedAt)
+            .Set(o => o.CompletedAt, outbox.CompletedAt);
+
+        await _outbox.UpdateOneAsync(o => o.Id == outbox.Id, update, cancellationToken: cancellationToken);
     }
 }

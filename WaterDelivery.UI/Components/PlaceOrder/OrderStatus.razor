@@ -1,0 +1,315 @@
+@page "/order-status/{BillId:guid}"
+@using WaterDelivery.Contracts.Addresses.Dtos
+@using WaterDelivery.Contracts.Bills.Dtos
+@using WaterDelivery.Contracts.CustomersAddresses.Dtos
+@using WaterDelivery.Contracts.Deliveries.Dtos
+@using WaterDelivery.Contracts.Enums
+@using WaterDelivery.UI.Components.Auth
+@using WaterDelivery.UI.Components.Cart
+@inject NavigationManager Navigation
+@inject CartService CartService
+@inject IHttpClientFactory HttpClientFactory
+@inject UserSession Session
+@rendermode InteractiveServer
+
+<PageTitle>Order Status</PageTitle>
+
+<div class="place-order-layout">
+    <div class="place-order-container">
+
+        <div class="place-order-header">
+            <button class="back-btn" @onclick="GoToCatalog">← Back to catalog</button>
+            <h1>Order Status</h1>
+            <p>Review your order and confirm payment.</p>
+        </div>
+
+        @if (_loading)
+        {
+            <div class="order-body">
+                <p class="empty-cart-msg">Loading your order…</p>
+            </div>
+        }
+        else if (_bill is null)
+        {
+            <div class="error-banner">⚠ We couldn't find this order.</div>
+        }
+        else
+        {
+            <div class="order-body">
+
+                <!-- Order Summary -->
+                <div class="order-summary-card">
+                    <h2>Order Summary</h2>
+                    <div class="summary-items">
+                        @foreach (var item in _bill.Order.Items)
+                        {
+                            <div class="summary-item">
+                                <span class="summary-item-name">@item.Product.Name</span>
+                                <span class="summary-item-qty">x@item.Quantity</span>
+                                <span class="summary-item-price">$@((item.Product.DefaultUnitPrice * item.Quantity).ToString("0.00"))</span>
+                            </div>
+                        }
+                    </div>
+                    <div class="summary-total">
+                        <span>Total</span>
+                        <strong>$@OrderTotal().ToString("0.00")</strong>
+                    </div>
+                </div>
+
+                <!-- Status -->
+                <div class="address-card">
+                    <h2>Payment</h2>
+                    <div class="status-row">
+                        <span>Bill status</span>
+                        <span class="status-badge status-@_bill.Status.ToString().ToLower()">@FormatStatus(_bill.Status)</span>
+                    </div>
+
+                    @if (_deliveryStatus is not null)
+                    {
+                        <div class="status-row">
+                            <span>Delivery status</span>
+                            <span class="status-badge">@FormatDeliveryStatus(_deliveryStatus.Value)</span>
+                        </div>
+                    }
+                </div>
+
+                @if (!string.IsNullOrEmpty(_errorMessage))
+                {
+                    <div class="error-banner">⚠ @_errorMessage</div>
+                }
+                @if (!string.IsNullOrEmpty(_infoMessage))
+                {
+                    <div class="success-card" style="padding:1.25rem;">
+                        <p style="margin:0;">@_infoMessage</p>
+                    </div>
+                }
+
+                @if (_bill.Status == BillStatus.WaitForPayment)
+                {
+                    <div class="status-actions">
+                        <button class="btn-primary submit-btn" @onclick="ConfirmPayment" disabled="@_isWorking">
+                            @if (_isWorking)
+                            {
+                                <span class="spinner"></span>
+                                <span>Processing…</span>
+                            }
+                            else
+                            {
+                                <span>Confirm payment</span>
+                            }
+                        </button>
+                        <button class="btn-secondary submit-btn" @onclick="CancelOrder" disabled="@_isWorking">
+                            Cancel order
+                        </button>
+                    </div>
+                }
+                else if (_bill.Status == BillStatus.Paid)
+                {
+                    <div class="success-card">
+                        <div class="success-icon">✓</div>
+                        <h2>Payment confirmed</h2>
+                        <p>Your delivery is on its way. You can track its status above.</p>
+                        <button class="btn-primary" @onclick="GoToCatalog">Back to Catalog</button>
+                    </div>
+                }
+                else if (_bill.Status == BillStatus.Cancelled)
+                {
+                    <div class="success-card">
+                        <div class="success-icon" style="background:#ef4444;">×</div>
+                        <h2>Order cancelled</h2>
+                        <p>This order has been cancelled. No payment was taken.</p>
+                        <button class="btn-primary" @onclick="GoToCatalog">Back to Catalog</button>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter] public Guid BillId { get; set; }
+
+    [SupplyParameterFromQuery(Name = "addressId")]
+    public Guid AddressId { get; set; }
+
+    private HttpClient _backendClient = default!;
+    private Guid _customerId;
+    private GetBillResultDto? _bill;
+    private DeliveryStatus? _deliveryStatus;
+
+    private bool _loading = true;
+    private bool _isWorking;
+    private string _errorMessage = string.Empty;
+    private string _infoMessage = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _backendClient = HttpClientFactory.CreateClient("backendClient");
+
+        var userId = await Session.GetUserIdAsync();
+        if (userId is null)
+        {
+            Navigation.NavigateTo("/login", forceLoad: true);
+            return;
+        }
+        _customerId = userId.Value;
+
+        await LoadBill();
+        _loading = false;
+    }
+
+    private async Task LoadBill()
+    {
+        try
+        {
+            var response = await _backendClient.GetAsync($"/api/waterDelivery/bill/{BillId}");
+            if (response.IsSuccessStatusCode)
+            {
+                _bill = await response.Content.ReadFromJsonAsync<GetBillResultDto>();
+            }
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Failed to load the order: {ex.Message}";
+        }
+    }
+
+    private decimal OrderTotal()
+    {
+        if (_bill is null) return 0m;
+        return _bill.Order.Items.Sum(i => i.Product.DefaultUnitPrice * i.Quantity);
+    }
+
+    private async Task ConfirmPayment()
+    {
+        if (_bill is null) return;
+        _isWorking = true;
+        _errorMessage = string.Empty;
+
+        try
+        {
+            // 1) Mark the bill paid.
+            var updateBill = new UpdateBillDto
+            {
+                Id = _bill.Id,
+                Order = _bill.Order,
+                CreationDate = _bill.CreationDate,
+                PaymentDate = DateTime.UtcNow,
+                Status = BillStatus.Paid
+            };
+            var billResponse = await _backendClient.PutAsJsonAsync("/api/waterDelivery/bill", updateBill);
+            if (!billResponse.IsSuccessStatusCode)
+            {
+                _errorMessage = "Could not confirm the payment. Please try again.";
+                return;
+            }
+
+            // 2) Create the delivery (seeds the outbox, which the background worker advances).
+            var address = await ResolveAddressAsync();
+            var createDelivery = new CreateDeliveryDto
+            {
+                DeliveryManId = Guid.Empty, // unassigned; a courier-assignment flow could set this later
+                Order = _bill.Order,
+                Address = address,
+                Status = DeliveryStatus.Assembly
+            };
+            var deliveryResponse = await _backendClient.PostAsJsonAsync("/api/waterDelivery/delivery", createDelivery);
+            if (deliveryResponse.IsSuccessStatusCode)
+            {
+                _deliveryStatus = DeliveryStatus.Assembly;
+            }
+
+            _bill.Status = BillStatus.Paid;
+            CartService.Clear();
+            _infoMessage = "Payment confirmed and your delivery has been scheduled.";
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Something went wrong: {ex.Message}";
+        }
+        finally
+        {
+            _isWorking = false;
+        }
+    }
+
+    private async Task CancelOrder()
+    {
+        if (_bill is null) return;
+        _isWorking = true;
+        _errorMessage = string.Empty;
+
+        try
+        {
+            var updateBill = new UpdateBillDto
+            {
+                Id = _bill.Id,
+                Order = _bill.Order,
+                CreationDate = _bill.CreationDate,
+                PaymentDate = _bill.PaymentDate,
+                Status = BillStatus.Cancelled
+            };
+            var response = await _backendClient.PutAsJsonAsync("/api/waterDelivery/bill", updateBill);
+            if (response.IsSuccessStatusCode)
+            {
+                _bill.Status = BillStatus.Cancelled;
+                CartService.Clear();
+            }
+            else
+            {
+                _errorMessage = "Could not cancel the order. Please try again.";
+            }
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Something went wrong: {ex.Message}";
+        }
+        finally
+        {
+            _isWorking = false;
+        }
+    }
+
+    /// <summary>
+    /// Resolves the full delivery address from the customer's address book using the id
+    /// carried over from checkout. Falls back to the first saved address if needed.
+    /// </summary>
+    private async Task<AddressDto> ResolveAddressAsync()
+    {
+        var response = await _backendClient.GetAsync($"/api/waterDelivery/customerAddress/{_customerId}");
+        if (!response.IsSuccessStatusCode)
+            throw new InvalidOperationException("Could not load the delivery address.");
+
+        var result = await response.Content.ReadFromJsonAsync<GetCustomerAddressesResultDto>();
+        var addresses = result?.Addresses ?? new List<AddressDto>();
+
+        var match = addresses.FirstOrDefault(a => a.Id == AddressId) ?? addresses.FirstOrDefault();
+        if (match is null)
+            throw new InvalidOperationException("No delivery address is on file for this order.");
+
+        return match;
+    }
+
+    private void GoToCatalog() => Navigation.NavigateTo("/catalog");
+
+    private static string FormatStatus(BillStatus status) => status switch
+    {
+        BillStatus.WaitForPayment => "Awaiting payment",
+        BillStatus.Paid => "Paid",
+        BillStatus.Cancelled => "Cancelled",
+        _ => status.ToString()
+    };
+
+    private static string FormatDeliveryStatus(DeliveryStatus status) => status switch
+    {
+        DeliveryStatus.Assembly => "Assembling your order",
+        DeliveryStatus.TransferredDeliveryService => "Handed to delivery service",
+        DeliveryStatus.WaitToDelivery => "Waiting to be delivered",
+        DeliveryStatus.Delivering => "Out for delivery",
+        DeliveryStatus.IssuedToCourier => "With the courier",
+        DeliveryStatus.Delivered => "Delivered",
+        DeliveryStatus.Rejected => "Rejected",
+        DeliveryStatus.Cancelled => "Cancelled",
+        _ => status.ToString()
+    };
+}

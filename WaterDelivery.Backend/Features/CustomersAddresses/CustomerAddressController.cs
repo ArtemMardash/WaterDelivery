@@ -20,6 +20,14 @@ public static class CustomerAddressController
             .WithName("CreateCustomerAddress")
             .WithOpenApi();
 
+        group.MapPost("/add-address", async ([FromBody] AddAddressToCustomerDto dto, [FromServices] IMediator mediator, CancellationToken cancellationToken) =>
+            {
+                var addressId = await mediator.Send(dto, cancellationToken);
+                return Results.Ok(addressId);
+            })
+            .WithName("AddAddressToCustomer")
+            .WithOpenApi();
+
         group.MapGet("/{id:guid}", async (Guid id, IMediator mediator, CancellationToken cancellationToken) =>
             {
                 var dto = new GetCustomerAddressesDto { CustomerId = id };

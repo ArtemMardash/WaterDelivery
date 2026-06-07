@@ -6,4 +6,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\WaterDelivery.Backend\WaterDelivery.Backend.csproj" />
+    </ItemGroup>
+
 </Project>

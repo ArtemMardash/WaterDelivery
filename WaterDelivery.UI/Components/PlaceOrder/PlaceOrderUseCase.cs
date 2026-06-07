@@ -1,4 +1,3 @@
-using WaterDelivery.Contracts.Addresses.Dtos;
 using WaterDelivery.Contracts.Bills.Dtos;
 using WaterDelivery.Contracts.CustomersAddresses.Dtos;
 using WaterDelivery.Contracts.Enums;
@@ -6,6 +5,14 @@ using WaterDelivery.Contracts.Orders.Dtos;
 
 namespace WaterDelivery.UI.Components.PlaceOrder;
 
+/// <summary>
+/// Places an order from the checkout page:
+///   1. Resolves the delivery address. A newly typed address is saved into the customer's
+///      address book (de-duplicated); an existing saved address is used as-is.
+///   2. Creates the order.
+///   3. Creates a bill in WaitForPayment status.
+/// The delivery itself is created later, when the customer confirms payment on the order-status page.
+/// </summary>
 public class PlaceOrderUseCase
 {
     private readonly HttpClient _backendClient;
@@ -17,23 +24,7 @@ public class PlaceOrderUseCase
 
     public async Task<PlaceOrderResult> ExecuteAsync(PlaceOrderRequest request, CancellationToken cancellationToken)
     {
-        var addressDto = new CreateAddressDto
-        {
-            Street = request.Street,
-            HouseNumber = request.HouseNumber,
-            AptNumber = request.AptNumber,
-            City = request.City,
-            State = request.State
-        };
-        var addressId = await CreateAddressAsync(addressDto, cancellationToken);
-        
-        //ToDo get addresses by customerId and add current address if its not there
-        var customerAddressesDto = new CreateCustomerAddressesDto
-        {
-            CustomerId = request.CustomerId,
-            Addresses = new List<AddressDto>()
-        };
-        await CreateCustomerAddressAsync(customerAddressesDto, cancellationToken);
+        var addressId = await ResolveAddressAsync(request, cancellationToken);
 
         var createOrderDto = new CreateOrderDto
         {
@@ -64,34 +55,37 @@ public class PlaceOrderUseCase
             BillId = billId
         };
     }
-    
-    private async Task<Guid> CreateAddressAsync(CreateAddressDto dto, CancellationToken cancellationToken)
+
+    /// <summary>
+    /// Ensures the address exists in the customer's address book and returns its id.
+    /// </summary>
+    private async Task<Guid> ResolveAddressAsync(PlaceOrderRequest request, CancellationToken cancellationToken)
     {
+        // Existing saved address already has a valid id -> nothing to persist.
+        if (!request.IsNewAddress && request.Address.Id != Guid.Empty)
+        {
+            return request.Address.Id;
+        }
+
+        var dto = new AddAddressToCustomerDto
+        {
+            CustomerId = request.CustomerId,
+            Address = request.Address
+        };
+
         var response = await _backendClient.PostAsJsonAsync(
-            "/api/waterDelivery/address",
+            "/api/waterDelivery/customerAddress/add-address",
             dto,
             cancellationToken);
 
         if (!response.IsSuccessStatusCode)
-            throw new InvalidOperationException("Failed to save address.");
+            throw new InvalidOperationException("Failed to save the delivery address.");
 
         var id = await response.Content.ReadFromJsonAsync<Guid>(cancellationToken: cancellationToken);
-
         if (id == Guid.Empty)
             throw new InvalidOperationException("Backend returned an invalid address id.");
 
         return id;
-    }
-
-    private async Task CreateCustomerAddressAsync(CreateCustomerAddressesDto dto, CancellationToken cancellationToken)
-    {
-        var response = await _backendClient.PostAsJsonAsync(
-            "/api/waterDelivery/customerAddress",
-            dto,
-            cancellationToken);
-
-        if (!response.IsSuccessStatusCode)
-            throw new InvalidOperationException("Failed to link address to customer.");
     }
 
     private async Task<Guid> CreateOrderAsync(CreateOrderDto dto, CancellationToken cancellationToken)
@@ -105,7 +99,6 @@ public class PlaceOrderUseCase
             throw new InvalidOperationException("Failed to create order.");
 
         var id = await response.Content.ReadFromJsonAsync<Guid>(cancellationToken: cancellationToken);
-
         if (id == Guid.Empty)
             throw new InvalidOperationException("Backend returned an invalid order id.");
 
@@ -123,7 +116,6 @@ public class PlaceOrderUseCase
             throw new InvalidOperationException("Failed to create bill.");
 
         var id = await response.Content.ReadFromJsonAsync<Guid>(cancellationToken: cancellationToken);
-
         if (id == Guid.Empty)
             throw new InvalidOperationException("Backend returned an invalid bill id.");
 

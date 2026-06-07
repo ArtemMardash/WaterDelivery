@@ -22,4 +22,9 @@ public class Order
         Items = orderItems ?? new List<OrderItem>();
     }
     
+    protected Order()
+    {
+        
+    }
+    
 }

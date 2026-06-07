@@ -53,6 +53,11 @@ public class Product
 
     }
 
+    protected Product()
+    {
+        
+    }
+
     private void SetName(string input)
     {
         if (string.IsNullOrWhiteSpace(input) ||input.Length < NAME_MIN_LENGTH || input.Length > NAME_MAX_LENGTH)

@@ -1,5 +1,4 @@
 using Mediator;
-using Newtonsoft.Json;
 using WaterDelivery.Backend.Core.Entities;
 using WaterDelivery.Backend.Core.Interfaces;
 using WaterDelivery.Backend.Features.Shared;
@@ -30,7 +29,7 @@ public class UpdateDeliveryUseCase: IRequestHandler<UpdateDeliveryDto>
         {
             Id = Guid.NewGuid(),
             Status = OutboxStatus.Pending,
-            PayLoad = JsonConvert.SerializeObject(deliveryToUpdate),
+            PayLoad = deliveryToUpdate.Id.ToString(),
             UpdatedAt = DateTime.UtcNow,
             CompletedAt = null
         };

@@ -1,6 +1,4 @@
 @page "/login"
-@rendermode InteractiveServer
-@inject NavigationManager Navigation
 
 <PageTitle>Login</PageTitle>
 
@@ -9,18 +7,19 @@
         <h1>Sign in</h1>
         <p class="subtitle">Continue with Google to access the application.</p>
 
-        <button class="google-btn" @onclick="SignInWithGoogle">
+        @* Plain anchor -> UI-owned OAuth endpoint on the same host, so no interactivity needed. *@
+        <a class="google-btn" href="@LoginHref">
             <span class="google-icon">G</span>
             <span>Sign in with Google</span>
-        </button>
+        </a>
     </div>
 </div>
 
 @code {
+    [SupplyParameterFromQuery(Name = "returnUrl")]
+    public string? ReturnUrl { get; set; }
 
-    private void SignInWithGoogle()
-    {
-        Navigation.NavigateTo("http://localhost:5017/api/auth/login", forceLoad: true);
-    }
-
+    private string LoginHref => string.IsNullOrWhiteSpace(ReturnUrl)
+        ? "/auth/login"
+        : $"/auth/login?returnUrl={Uri.EscapeDataString(ReturnUrl)}";
 }

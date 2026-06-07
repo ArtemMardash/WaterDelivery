@@ -170,9 +170,10 @@
         });
     }
 
-    private void PlaceOrder()
+    private async Task PlaceOrder()
     {
-        Navigation.NavigateTo(Session.IsAuthenticated ? "/proceed-to-checkout" : "/login");
+        var isAuthenticated = await Session.IsAuthenticatedAsync();
+        Navigation.NavigateTo(isAuthenticated ? "/proceed-to-checkout" : "/login");
     }
 
 }

@@ -43,6 +43,11 @@ public class Address
         IsDeleted = isDeleted;
     }
 
+    protected Address()
+    {
+        
+    }
+
     public void SetStreet(string input)
     {
         if (string.IsNullOrWhiteSpace(input) || input.Length > STREET_MAX_LENGTH)

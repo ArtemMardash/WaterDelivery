@@ -34,9 +34,14 @@ public class Bill
 
     public void SetCreationDate(DateTime creation)
     {
-        if (creation < DateTime.Now.AddSeconds(-10))
+        // Normalise to UTC before comparing. The previous version compared the incoming value
+        // (sent as DateTime.UtcNow by callers) against DateTime.Now (local), which threw on any
+        // machine whose local time is ahead of UTC. Comparing both sides in UTC fixes that.
+        var creationUtc = creation.Kind == DateTimeKind.Utc ? creation : creation.ToUniversalTime();
+
+        if (creationUtc < DateTime.UtcNow.AddSeconds(-10))
         {
-            throw new ArgumentException($"Creation date can not be less then {DateTime.Now}");
+            throw new ArgumentException($"Creation date can not be less then {DateTime.UtcNow}");
         }
 
         CreationDate = creation;
@@ -67,6 +72,9 @@ public class Bill
                 Status = newStatus;
                 break;
             case BillStatus.WaitForPayment when newStatus is BillStatus.Paid:
+                Status = newStatus;
+                break;
+            case BillStatus.WaitForPayment when newStatus is BillStatus.Cancelled:
                 Status = newStatus;
                 break;
             default:
